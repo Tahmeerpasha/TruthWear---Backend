@@ -1,4 +1,4 @@
-package com.truthwear.truthwear.service;
+package com.truthwear.truthwear.service.interfaces;
 
 import com.truthwear.truthwear.entity.User;
 import org.springframework.http.ResponseEntity;

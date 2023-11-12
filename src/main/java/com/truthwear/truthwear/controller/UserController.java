@@ -37,6 +37,7 @@ public class UserController {
         return userService.deleteUser(id);
     }
 
+    //This is not implemented yet.
     @PutMapping("/users/{id}")
     public User updateUser(@PathVariable int id, @RequestBody User user) {
         return userService.updateUser(id, user);

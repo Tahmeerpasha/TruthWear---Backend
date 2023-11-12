@@ -2,6 +2,7 @@ package com.truthwear.truthwear.service;
 
 import com.truthwear.truthwear.entity.User;
 import com.truthwear.truthwear.repository.UserRepository;
+import com.truthwear.truthwear.service.interfaces.UserService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -11,7 +12,7 @@ import org.springframework.stereotype.Service;
 import java.util.*;
 
 @Service
-public class UserServiceImpl implements UserService{
+public class UserServiceImpl implements UserService {
     private UserRepository userRepository;
 
     public UserServiceImpl() {
@@ -48,28 +49,8 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public User updateUser(int id, User updatedUser){
-//        Optional<User> existingUserOptional = userRepository.findById(id);
-//
-//        if (existingUserOptional.isPresent()) {
-//            User existingUser = existingUserOptional.get();
-//
-//            // Update only the fields that should be modified
-//            existingUser.setFirstName(updatedUser.getFirstName());
-//            existingUser.setLastName(updatedUser.getLastName());
-//            existingUser.setEmailId(updatedUser.getEmailId());
-//            existingUser.setPhoneNumber(updatedUser.getPhoneNumber());
-//            existingUser.setPassword(updatedUser.getPassword());
-//            // Update other fields as needed
-//
-//            // Save the updated user
-//            userRepository.save(existingUser);
-//
-//            return existingUser;
-//        } else {
-//            // Handle the case where the user with the given ID does not exist
-//            throw new RuntimeException("User not found with ID: " + id);
-//        }
-return null;
+        updatedUser.setId(id);
+        return userRepository.save(updatedUser);
     }
 
     @Override
