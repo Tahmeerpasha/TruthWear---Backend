@@ -8,5 +8,5 @@ import java.util.List;
 public interface ProductReviewsRepository extends JpaRepository<com.truthwear.truthwear.entity.ProductReviews,Integer> {
     List<ProductReviews> findByUserId(int userId);
 
-    List<ProductReviews> findByProductId(int productId);
+    List<ProductReviews> findByOrderedProductId(int productId);
 }

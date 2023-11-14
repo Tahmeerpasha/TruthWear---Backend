@@ -16,11 +16,13 @@ public interface ProductReviewService {
 
     ResponseEntity<List<ProductReviews>> getProductReviewBasedOnProductId(int productId);
 
-    ResponseEntity<ProductReviews> updateReviews(int id,int ratingValue, String comments);
+    ResponseEntity<ProductReviews> updateReviews(int id,Integer ratingValue, String comments);
 
     ResponseEntity<ProductReviews> deleteReviewById(int id);
 
     ResponseEntity<List<ProductReviews>> deleteReviewByUserId(int userId);
 
     ResponseEntity<List<ProductReviews>> deleteReviewByProductId(int productId);
+
+    ResponseEntity<ProductReviews> getProductReviewById(int id);
 }

@@ -49,7 +49,7 @@ public class ProductReviewServiceImpl implements ProductReviewService{
     public ResponseEntity<List<ProductReviews>> getProductReviewBasedOnProductId(int productId) {
         List<ProductReviews> productReviews;
         try {
-             productReviews = productReviewsRepository.findByProductId(productId);
+             productReviews = productReviewsRepository.findByOrderedProductId(productId);
         }catch (Exception e){
             return ResponseEntity.internalServerError().build();
         }
@@ -60,12 +60,12 @@ public class ProductReviewServiceImpl implements ProductReviewService{
     }
 
     @Override
-    public ResponseEntity<ProductReviews> updateReviews(int id,int ratingValue, String comments) {
+    public ResponseEntity<ProductReviews> updateReviews(int id,Integer ratingValue, String comments) {
            ProductReviews productReviews =  productReviewsRepository.findById(id).get();
-        if (ratingValue >= 0 && ratingValue <= 10 && !comments.isEmpty()){
+        if (ratingValue != null && ratingValue >= 0 && ratingValue <= 10 && !comments.isEmpty()){
             productReviews.setRating(ratingValue);
             productReviews.setReview(comments);
-        }else if (ratingValue >= 0 && ratingValue <= 10 )
+        }else if (ratingValue != null && ratingValue >= 0 && ratingValue <= 10 )
             productReviews.setRating(ratingValue);
         else productReviews.setReview(comments);
 
@@ -103,7 +103,7 @@ public class ProductReviewServiceImpl implements ProductReviewService{
 
     @Override
     public ResponseEntity<List<ProductReviews>> deleteReviewByProductId(int productId) {
-        List<ProductReviews> productReviews = productReviewsRepository.findByProductId(productId);
+        List<ProductReviews> productReviews = productReviewsRepository.findByOrderedProductId(productId);
         if (productReviews != null){
             try {
                 productReviewsRepository.deleteAll(productReviews);
@@ -115,6 +115,10 @@ public class ProductReviewServiceImpl implements ProductReviewService{
             return ResponseEntity.notFound().build();
     }
 
+    @Override
+    public ResponseEntity<ProductReviews> getProductReviewById(int id) {
+        return ResponseEntity.ok(productReviewsRepository.findById(id).get());
+    }
 
 
 }

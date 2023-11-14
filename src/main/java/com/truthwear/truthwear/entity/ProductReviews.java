@@ -3,7 +3,7 @@ package com.truthwear.truthwear.entity;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "user_review")
+@Table(name = "product_review")
 public class ProductReviews {
 
     @Id
@@ -15,7 +15,7 @@ public class ProductReviews {
     private int userId;
 
     @Column(name = "ordered_product_id")
-    private int productId;
+    private int orderedProductId;
 
     @Column(name = "rating_value")
     private int rating;
@@ -28,7 +28,7 @@ public class ProductReviews {
 
     public ProductReviews(int userId, int productId, int rating, String review) {
         this.userId = userId;
-        this.productId = productId;
+        this.orderedProductId = productId;
         this.rating = rating;
         this.review = review;
     }
@@ -49,12 +49,12 @@ public class ProductReviews {
         this.userId = userId;
     }
 
-    public int getProductId() {
-        return productId;
+    public int getOrderedProductId() {
+        return orderedProductId;
     }
 
-    public void setProductId(int productId) {
-        this.productId = productId;
+    public void setOrderedProductId(int productId) {
+        this.orderedProductId = productId;
     }
 
     public int getRating() {
@@ -78,7 +78,7 @@ public class ProductReviews {
         return "Reviews{" +
                 "id=" + id +
                 ", userId=" + userId +
-                ", productId=" + productId +
+                ", productId=" + orderedProductId +
                 ", rating=" + rating +
                 ", review='" + review + '\'' +
                 '}';
