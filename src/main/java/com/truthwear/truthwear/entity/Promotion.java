@@ -1,10 +1,12 @@
 package com.truthwear.truthwear.entity;
 
 import jakarta.persistence.*;
+import lombok.Data;
 
 import java.sql.Timestamp;
 
 @Entity
+@Data
 @Table(name = "promotion")
 public class Promotion {
     @Id
@@ -36,65 +38,5 @@ public class Promotion {
         this.discountRate = discountRate;
         this.startDate = startDate;
         this.endDate = endDate;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getPromotionName() {
-        return promotionName;
-    }
-
-    public void setPromotionName(String promotionName) {
-        this.promotionName = promotionName;
-    }
-
-    public String getPromotionDescription() {
-        return promotionDescription;
-    }
-
-    public void setPromotionDescription(String promotionDescription) {
-        this.promotionDescription = promotionDescription;
-    }
-
-    public int getDiscountRate() {
-        return discountRate;
-    }
-
-    public void setDiscountRate(int discountRate) {
-        this.discountRate = discountRate;
-    }
-
-    public Timestamp getStartDate() {
-        return startDate;
-    }
-
-    public void setStartDate(Timestamp startDate) {
-        this.startDate = startDate;
-    }
-
-    public Timestamp getEndDate() {
-        return endDate;
-    }
-
-    public void setEndDate(Timestamp endDate) {
-        this.endDate = endDate;
-    }
-
-    @Override
-    public String toString() {
-        return "Promotion{" +
-                "id=" + id +
-                ", promotionName='" + promotionName + '\'' +
-                ", promotionDescription='" + promotionDescription + '\'' +
-                ", discountRate=" + discountRate +
-                ", startDate=" + startDate +
-                ", endDate=" + endDate +
-                '}';
     }
 }

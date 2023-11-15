@@ -1,10 +1,12 @@
 package com.truthwear.truthwear.entity;
 
 import jakarta.persistence.*;
+import lombok.Data;
 
 import java.math.BigDecimal;
 
 @Entity
+@Data
 @Table(name = "shipping_method")
 public class ShippingMethod {
     @Id
@@ -26,36 +28,4 @@ public class ShippingMethod {
         this.price = price;
     }
 
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getShippingMethod() {
-        return shippingMethod;
-    }
-
-    public void setShippingMethod(String shippingMethod) {
-        this.shippingMethod = shippingMethod;
-    }
-
-    public BigDecimal getPrice() {
-        return price;
-    }
-
-    public void setPrice(BigDecimal price) {
-        this.price = price;
-    }
-
-    @Override
-    public String toString() {
-        return "ShippingMethod{" +
-                "id=" + id +
-                ", shippingMethod='" + shippingMethod + '\'' +
-                ", price=" + price +
-                '}';
-    }
 }

@@ -1,8 +1,10 @@
 package com.truthwear.truthwear.entity;
 
 import jakarta.persistence.*;
+import lombok.Data;
 
 @Entity
+@Data
 @Table(name = "promotion_category")
 public class PromotionCategory {
     @Id
@@ -21,38 +23,5 @@ public class PromotionCategory {
     public PromotionCategory(int categoryId, int promotionId) {
         this.categoryId = categoryId;
         this.promotionId = promotionId;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public int getCategoryId() {
-        return categoryId;
-    }
-
-    public void setCategoryId(int categoryId) {
-        this.categoryId = categoryId;
-    }
-
-    public int getPromotionId() {
-        return promotionId;
-    }
-
-    public void setPromotionId(int promotionId) {
-        this.promotionId = promotionId;
-    }
-
-    @Override
-    public String toString() {
-        return "PromotionCategory{" +
-                "id=" + id +
-                ", categoryId=" + categoryId +
-                ", promotionId=" + promotionId +
-                '}';
     }
 }

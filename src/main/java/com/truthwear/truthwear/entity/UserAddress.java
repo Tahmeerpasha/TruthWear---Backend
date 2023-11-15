@@ -1,7 +1,10 @@
 package com.truthwear.truthwear.entity;
 
 import jakarta.persistence.*;
+import lombok.Data;
+
 @Entity
+@Data
 @Table(name = "user_address")
 public class UserAddress {
 
@@ -26,47 +29,5 @@ public class UserAddress {
         this.userId = userId;
         this.addressId = addressId;
         this.isDefault = isDefault;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public int getUserId() {
-        return userId;
-    }
-
-    public void setUserId(int userId) {
-        this.userId = userId;
-    }
-
-    public int getAddressId() {
-        return addressId;
-    }
-
-    public void setAddressId(int addressId) {
-        this.addressId = addressId;
-    }
-
-    public int getIsDefault() {
-        return isDefault;
-    }
-
-    public void setIsDefault(int isDefault) {
-        this.isDefault = isDefault;
-    }
-
-    @Override
-    public String toString() {
-        return "UserAddress{" +
-                "id=" + id +
-                ", userId=" + userId +
-                ", addressId=" + addressId +
-                ", isDefault=" + isDefault +
-                '}';
     }
 }

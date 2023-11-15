@@ -1,8 +1,10 @@
 package com.truthwear.truthwear.entity;
 
 import jakarta.persistence.*;
+import lombok.Data;
 
 @Entity
+@Data
 @Table(name = "product_review")
 public class ProductReviews {
 
@@ -31,56 +33,5 @@ public class ProductReviews {
         this.orderedProductId = productId;
         this.rating = rating;
         this.review = review;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public int getUserId() {
-        return userId;
-    }
-
-    public void setUserId(int userId) {
-        this.userId = userId;
-    }
-
-    public int getOrderedProductId() {
-        return orderedProductId;
-    }
-
-    public void setOrderedProductId(int productId) {
-        this.orderedProductId = productId;
-    }
-
-    public int getRating() {
-        return rating;
-    }
-
-    public void setRating(int rating) {
-        this.rating = rating;
-    }
-
-    public String getReview() {
-        return review;
-    }
-
-    public void setReview(String review) {
-        this.review = review;
-    }
-
-    @Override
-    public String toString() {
-        return "Reviews{" +
-                "id=" + id +
-                ", userId=" + userId +
-                ", productId=" + orderedProductId +
-                ", rating=" + rating +
-                ", review='" + review + '\'' +
-                '}';
     }
 }
