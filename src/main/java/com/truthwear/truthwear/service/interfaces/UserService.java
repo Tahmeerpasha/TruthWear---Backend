@@ -1,18 +1,18 @@
 package com.truthwear.truthwear.service.interfaces;
 
-import com.truthwear.truthwear.entity.User;
+import com.truthwear.truthwear.entity.SiteUser;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
 public interface UserService {
-     User saveUser(User user);
+     SiteUser saveUser(SiteUser siteUser);
 
-     List<User> getAllUsers();
+     List<SiteUser> getAllUsers();
 
-     User deleteUser(int id);
+     SiteUser deleteUser(int id);
 
-     User updateUser(int id, User user);
+     SiteUser updateUser(int id, SiteUser siteUser);
 
      ResponseEntity<?> getUserById(int id);
 }

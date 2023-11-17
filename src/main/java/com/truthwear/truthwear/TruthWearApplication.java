@@ -1,6 +1,5 @@
 package com.truthwear.truthwear;
 
-import com.truthwear.truthwear.entity.Address;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 

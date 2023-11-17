@@ -1,7 +1,7 @@
 package com.truthwear.truthwear.service;
 
-import com.truthwear.truthwear.entity.User;
-import com.truthwear.truthwear.repository.UserRepository;
+import com.truthwear.truthwear.entity.SiteUser;
+import com.truthwear.truthwear.repository.SiteUserRepository;
 import com.truthwear.truthwear.service.interfaces.UserService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,51 +13,51 @@ import java.util.*;
 
 @Service
 public class UserServiceImpl implements UserService {
-    private UserRepository userRepository;
+    private SiteUserRepository siteUserRepository;
 
     public UserServiceImpl() {
     }
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository) {
-        this.userRepository = userRepository;
+    public UserServiceImpl(SiteUserRepository siteUserRepository) {
+        this.siteUserRepository = siteUserRepository;
     }
     @Override
-    public User saveUser(User user) {
-        if (userRepository.existsByEmailId(user.getEmailId()))
+    public SiteUser saveUser(SiteUser siteUser) {
+        if (siteUserRepository.existsByEmailId(siteUser.getEmailId()))
             throw new RuntimeException("User already exists");
         else
-            return userRepository.save(user);
+            return siteUserRepository.save(siteUser);
     }
 
     @Override
-    public List<User> getAllUsers() {
-        return userRepository.findAll();
+    public List<SiteUser> getAllUsers() {
+        return siteUserRepository.findAll();
     }
 
     @Override
     @Transactional
-    public User deleteUser(int id) {
-        if (userRepository.existsById(id)) {
-            User user = userRepository.findById(id).get();
-            userRepository.deleteById(id);
-            return user;
+    public SiteUser deleteUser(int id) {
+        if (siteUserRepository.existsById(id)) {
+            SiteUser siteUser = siteUserRepository.findById(id).get();
+            siteUserRepository.deleteById(id);
+            return siteUser;
         }
         else
             throw new RuntimeException("User does not exist");
     }
 
     @Override
-    public User updateUser(int id, User updatedUser){
-        updatedUser.setId(id);
-        return userRepository.save(updatedUser);
+    public SiteUser updateUser(int id, SiteUser updatedSiteUser){
+        updatedSiteUser.setId(id);
+        return siteUserRepository.save(updatedSiteUser);
     }
 
     @Override
     public ResponseEntity<?> getUserById(int id) {
-      if (userRepository.existsById(id)){
-         User user = userRepository.findById(id).get();
-         return new ResponseEntity<>(user, HttpStatus.OK);
+      if (siteUserRepository.existsById(id)){
+         SiteUser siteUser = siteUserRepository.findById(id).get();
+         return new ResponseEntity<>(siteUser, HttpStatus.OK);
       }
       else{
           Map<String, String> errorResponse = new HashMap<>();

@@ -1,6 +1,5 @@
 package com.truthwear.truthwear.repository;
 
-import com.truthwear.truthwear.entity.User;
 import com.truthwear.truthwear.entity.UserAddress;
 import org.springframework.data.jpa.repository.JpaRepository;
 
