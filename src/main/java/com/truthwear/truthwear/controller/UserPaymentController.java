@@ -12,7 +12,7 @@ import java.sql.Timestamp;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/v1/")
 public class UserPaymentController {
     private final UserPaymentServiceImpl userPaymentService;
 
@@ -21,25 +21,25 @@ public class UserPaymentController {
         this.userPaymentService = userPaymentService;
     }
 
-    @GetMapping("/user_payments")
+    @GetMapping("user_payments")
     ResponseEntity<List<UserPaymentMethod>> getAllUserPayments() {
         return userPaymentService.getAllUserPayments();
     }
 
-    @GetMapping("/user_payments/{id}")
+    @GetMapping("user_payments/{id}")
     ResponseEntity<List<UserPaymentMethod>> getAllUserPaymentsById(@PathVariable int id) {
         return userPaymentService.getAllUserPaymentsById(id);
     }
-    @GetMapping("/user_payments/user/{userId}")
+    @GetMapping("user_payments/user/{userId}")
     ResponseEntity<List<UserPaymentMethod>> getAllUserPaymentsByUserId(@PathVariable int userId) {
         return userPaymentService.getAllUserPaymentsByUserId(userId);
     }
-    @PostMapping("/user_payments")
+    @PostMapping("user_payments")
     ResponseEntity<UserPaymentMethod> createUserPaymentMethod(@RequestBody UserPaymentMethod userPaymentMethod){
         return userPaymentService.createUserPaymentMethod(userPaymentMethod);
     }
 
-    @PutMapping("/user_payments/{id}")
+    @PutMapping("user_payments/{id}")
     ResponseEntity<UserPaymentMethod> updateUserPaymentMethod(@PathVariable int id,
                                                             @RequestParam(name = "clientName", required = false) String  clientName,
                                                             @RequestParam(name = "paymentStatus", required = false) String paymentStatus,
@@ -49,12 +49,12 @@ public class UserPaymentController {
         return userPaymentService.updateUserPaymentMethod(id,clientName,paymentStatus,transactionId,transactionDate);
     }
 
-    @DeleteMapping("/user_payments/{id}")
+    @DeleteMapping("user_payments/{id}")
     ResponseEntity<UserPaymentMethod> deleteUserPaymentMethod(@PathVariable int id){
         return userPaymentService.deleteUserPaymentMethod(id);
     }
 
-    @DeleteMapping("/user_payments/user/{userId}")
+    @DeleteMapping("user_payments/user/{userId}")
     ResponseEntity<List<UserPaymentMethod>> deleteUserPaymentMethodByUserId(@PathVariable int userId)
     {
         return userPaymentService.deleteUserPaymentMethodByUserId(userId);

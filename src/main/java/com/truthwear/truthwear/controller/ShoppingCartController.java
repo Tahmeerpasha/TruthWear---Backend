@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/v1/")
 public class ShoppingCartController {
     private final ShoppingCartServiceImpl shoppingCartService;
 
@@ -18,32 +18,32 @@ public class ShoppingCartController {
         this.shoppingCartService = shoppingCartService;
     }
 
-    @GetMapping("/shopping_carts")
+    @GetMapping("shopping-carts")
     ResponseEntity<List<ShoppingCart>> getAllShoppingCart(){
         return shoppingCartService.getAllShoppingCart();
     }
 
-    @GetMapping("/shopping_carts/{id}")
+    @GetMapping("shopping-carts/{id}")
     ResponseEntity<ShoppingCart> getShoppingCartById(@PathVariable int id){
         return shoppingCartService.getShoppingCartById(id);
     }
 
-    @GetMapping("/shopping_carts/user/{userId}")
+    @GetMapping("shopping-carts/user/{userId}")
     ResponseEntity<ShoppingCart> getShoppingCartByUserId(@PathVariable int userId){
         return shoppingCartService.getShoppingCartByUserId(userId);
     }
 
-    @PostMapping("/shopping_carts")
+    @PostMapping("shopping-carts")
     ResponseEntity<ShoppingCart> createShoppingCart(@RequestBody ShoppingCart shoppingCart){
         return shoppingCartService.createShoppingCart(shoppingCart);
     }
 
-    @PutMapping("/shopping_carts/{id}")
+    @PutMapping("shopping-carts/{id}")
     ResponseEntity<ShoppingCart> updateShoppingCart(@RequestParam(name = "userId", required = false) int userId, @PathVariable int id){
         return shoppingCartService.updateShoppingCart(id,userId);
     }
 
-    @DeleteMapping("/shopping_carts/{id}")
+    @DeleteMapping("shopping-carts/{id}")
     ResponseEntity<ShoppingCart> deleteShoppingCart(@PathVariable int id){
         return shoppingCartService.deleteShoppingCart(id);
     }

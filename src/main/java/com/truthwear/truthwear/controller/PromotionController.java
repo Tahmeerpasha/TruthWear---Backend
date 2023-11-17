@@ -9,7 +9,7 @@ import java.sql.Timestamp;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/v1/")
 public class PromotionController {
 
     private final PromotionServiceImpl promotionService;
@@ -18,22 +18,22 @@ public class PromotionController {
         this.promotionService = promotionService;
     }
 
-    @GetMapping("/promotions")
+    @GetMapping("promotions")
     ResponseEntity<List<Promotion>> getAllPromotions() {
         return promotionService.getAllPromotions();
     }
 
-    @GetMapping("/promotions/{id}")
+    @GetMapping("promotions/{id}")
     ResponseEntity<Promotion> getPromotionsById(@PathVariable int id) {
         return promotionService.getPromotionsById(id);
     }
 
-    @PostMapping("/promotions")
+    @PostMapping("promotions")
     ResponseEntity<Promotion> createPromotion(@RequestBody Promotion promotion) {
         return promotionService.createPromotion(promotion);
     }
 
-    @PutMapping("/promotions/{id}")
+    @PutMapping("promotions/{id}")
     ResponseEntity<Promotion> updatePromotion(@RequestParam(name = "promotionName", required = false) String promotionName,
                                               @RequestParam(name = "promotionDescription", required = false) String promotionDescription,
                                               @RequestParam(name = "discountRate", required = false) Integer discountRate,
@@ -44,7 +44,7 @@ public class PromotionController {
         return promotionService.updatePromotion(id, promotionName, promotionDescription, discountRate, startDate, endDate);
     }
 
-    @DeleteMapping("/promotions/{id}")
+    @DeleteMapping("promotions/{id}")
     ResponseEntity<Promotion> deletePromotion(@PathVariable int id) {
         return promotionService.deletePromotion(id);
     }

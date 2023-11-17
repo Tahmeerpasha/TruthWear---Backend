@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/v1/")
 public class UserController {
 
     private final UserServiceImpl userService;
@@ -17,28 +17,28 @@ public class UserController {
         this.userService = userService;
     }
 
-    @PostMapping("/users")
+    @PostMapping("users")
     public SiteUser saveUser(@RequestBody SiteUser siteUser) {
         return userService.saveUser(siteUser);
     }
 
-    @GetMapping("/users")
+    @GetMapping("users")
     public List<SiteUser> getAllUsers(){
         return userService.getAllUsers();
     }
 
-    @GetMapping("/users/{id}")
+    @GetMapping("users/{id}")
     public ResponseEntity<?> getUserById1(@PathVariable int id) {
         return userService.getUserById(id);
     }
 
-    @DeleteMapping("/users/{id}")
+    @DeleteMapping("users/{id}")
     public SiteUser deleteUser(@PathVariable int id) {
         return userService.deleteUser(id);
     }
 
     //This is not implemented yet.
-    @PutMapping("/users/{id}")
+    @PutMapping("users/{id}")
     public SiteUser updateUser(@PathVariable int id, @RequestBody SiteUser siteUser) {
         return userService.updateUser(id, siteUser);
     }

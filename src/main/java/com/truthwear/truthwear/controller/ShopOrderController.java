@@ -10,7 +10,7 @@ import java.sql.Timestamp;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/v1/")
 public class ShopOrderController {
 
     private final ShopOrderServiceImpl shopOrderService;
@@ -19,26 +19,26 @@ public class ShopOrderController {
         this.shopOrderService = shopOrderService;
     }
 
-    @GetMapping("/shop_orders")
+    @GetMapping("shop-orders")
     ResponseEntity<List<ShopOrder>> getAllShopOrders(){
         return shopOrderService.getAllShopOrders();
     }
 
-    @GetMapping("/shop_orders/{id}")
+    @GetMapping("shop-orders/{id}")
     ResponseEntity<ShopOrder> getAllShopOrdersById(@PathVariable int id){
         return shopOrderService.getAllShopOrdersById(id);
     }
-    @GetMapping("/shop_orders/user/{userId}")
+    @GetMapping("shop-orders/user/{userId}")
     ResponseEntity<List<ShopOrder>> getAllShopOrdersByUserId(@PathVariable int userId){
         return shopOrderService.getAllShopOrdersByUserId(userId);
     }
 
-    @PostMapping("/shop_orders")
+    @PostMapping("shop-orders")
     ResponseEntity<ShopOrder> createShopOrder( @RequestBody ShopOrder shopOrder){
         return shopOrderService.createShopOrder(shopOrder);
     }
 
-    @PutMapping("/shop_orders/{id}")
+    @PutMapping("shop-orders/{id}")
     ResponseEntity<ShopOrder> updateShopOrder(
             @RequestParam(value = "orderDate", required = false)Timestamp orderDate,
             @RequestParam(value = "orderPaymentMethodId", required = false)Integer orderPaymentMethodId,
@@ -49,7 +49,7 @@ public class ShopOrderController {
             @PathVariable int id){
         return shopOrderService.updateShopOrder(id,orderDate,shippingAddressId,shippingMethodId,orderTotal,orderStatus,orderPaymentMethodId);
     }
-    @DeleteMapping("/shop_orders/{id}")
+    @DeleteMapping("shop-orders/{id}")
     ResponseEntity<ShopOrder> deleteShopOrder(@PathVariable int id){
         return shopOrderService.deleteShopOrder(id);
     }

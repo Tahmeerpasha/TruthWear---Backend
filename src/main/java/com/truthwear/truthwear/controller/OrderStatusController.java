@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/v1/")
 public class OrderStatusController {
 
     private final OrderStatusServiceImpl orderStatusService;
@@ -17,26 +17,26 @@ public class OrderStatusController {
         this.orderStatusService = orderStatusService;
     }
 
-    @GetMapping("order_status")
+    @GetMapping("order-status")
     ResponseEntity<List<OrderStatus>> getAllOrderStatus(){
         return orderStatusService.getAllOrderStatus();
     }
 
-    @GetMapping("order_status/{id}")
+    @GetMapping("order-status/{id}")
     ResponseEntity<OrderStatus> getAllOrderStatusById(@PathVariable int id){
         return orderStatusService.getAllOrderStatusById(id);
     }
 
-    @PostMapping("order_status")
+    @PostMapping("order-status")
     ResponseEntity<OrderStatus> createOrderStatus(@RequestBody OrderStatus orderStatus){
         return orderStatusService.createOrderStatus(orderStatus);
     }
-    @PutMapping("order_status/{id}")
+    @PutMapping("order-status/{id}")
     ResponseEntity<OrderStatus> updateOrderStatus(@PathVariable int id, @RequestParam("orderStatus") String orderStatus){
         return orderStatusService.updateOrderStatus(id,orderStatus);
     }
 
-    @DeleteMapping("order_status/{id}")
+    @DeleteMapping("order-status/{id}")
     ResponseEntity<OrderStatus> deleteOrderStatusById(@PathVariable int id){
         return orderStatusService.deleteOrderStatusById(id);
     }

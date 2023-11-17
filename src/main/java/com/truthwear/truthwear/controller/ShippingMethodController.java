@@ -9,7 +9,7 @@ import java.math.BigDecimal;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/v1/")
 public class ShippingMethodController {
     private final ShippingMethodServiceImpl shippingMethodService;
 
@@ -17,22 +17,22 @@ public class ShippingMethodController {
         this.shippingMethodService = shippingMethodService;
     }
 
-    @GetMapping("shipping_methods")
+    @GetMapping("shipping-methods")
     ResponseEntity<List<ShippingMethod>> getAllShippingMethod(){
         return shippingMethodService.getAllShippingMethod();
     }
 
-    @GetMapping("shipping_methods/{id}")
+    @GetMapping("shipping-methods/{id}")
     ResponseEntity<ShippingMethod> getShippingMethodById(@PathVariable int id){
         return shippingMethodService.getShippingMethodById(id);
     }
 
-    @PostMapping("shipping_methods")
+    @PostMapping("shipping-methods")
     ResponseEntity<ShippingMethod> createShippingMethod(@RequestBody ShippingMethod shippingMethod){
         return shippingMethodService.createShippingMethod(shippingMethod);
     }
 
-    @PutMapping("shipping_methods/{id}")
+    @PutMapping("shipping-methods/{id}")
     ResponseEntity<ShippingMethod> updateShippingMethod(@PathVariable int id,
                                                         @RequestParam(value = "shippingMethod",required = false) String shippingMethod,
                                                         @RequestParam(value = "price",required = false) BigDecimal price
@@ -40,7 +40,7 @@ public class ShippingMethodController {
         return shippingMethodService.updateShippingMethod(id,shippingMethod, price);
     }
 
-    @DeleteMapping("shipping_methods/{id}")
+    @DeleteMapping("shipping-methods/{id}")
     ResponseEntity<ShippingMethod> deleteShippingMethod(@PathVariable int id){
         return shippingMethodService.deleteShippingMethod(id);
     }

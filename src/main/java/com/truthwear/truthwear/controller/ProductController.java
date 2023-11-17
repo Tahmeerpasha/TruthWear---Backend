@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/v1/")
 public class ProductController {
 
     private final ProductServiceImpl productService;
@@ -21,17 +21,17 @@ public class ProductController {
         this.productService = productService;
     }
 
-    @GetMapping("/products")
+    @GetMapping("products")
     public List<Product> getAllProducts() {
         return productService.getAllProducts();
     }
 
-    @GetMapping("/products/{id}")
+    @GetMapping("products/{id}")
     public Optional<Product> getProductById(@PathVariable int id) {
         return productService.getProductById(id);
     }
 
-    @PostMapping("/products/upload")
+    @PostMapping("products/upload")
     public ResponseEntity<Product> createProduct(@RequestParam("categoryName") String categoryName,
                                                  @RequestParam("productName") String productName,
                                                  @RequestParam("productDescription") String productDescription,
@@ -42,17 +42,17 @@ public class ProductController {
         return productService.createProduct(categoryName,productName, productDescription, image, stock, price);
     }
 
-    @DeleteMapping("/products/{id}")
+    @DeleteMapping("products/{id}")
     public ResponseEntity<Product> deleteProduct(@PathVariable int id) {
         return productService.deleteProduct(id);
     }
 
-    @PutMapping("/products/{id}")
+    @PutMapping("products/{id}")
     public ResponseEntity<Product> updateProduct(@PathVariable int id, @RequestBody Product product){
         return productService.updateProduct(id, product);
     }
 
-    @GetMapping("/products/search")
+    @GetMapping("products/search")
     public List<Product> searchProduct(
             @RequestParam(name = "name", required = false)     String name,
             @RequestParam(name = "category", required = false) String category,

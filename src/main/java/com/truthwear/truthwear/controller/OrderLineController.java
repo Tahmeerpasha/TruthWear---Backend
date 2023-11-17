@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/v1/")
 public class OrderLineController {
     private final OrderLineServiceImpl orderLineService;
 
@@ -16,22 +16,22 @@ public class OrderLineController {
         this.orderLineService = orderLineService;
     }
 
-    @GetMapping("order_lines")
+    @GetMapping("order-lines")
     ResponseEntity<List<OrderLine>> getAllOrderLines(){
         return orderLineService.getAllOrderLines();
     }
 
-    @GetMapping("order_lines/{id}")
+    @GetMapping("order-lines/{id}")
     ResponseEntity<OrderLine> getAllOrderLinesById(@PathVariable int id){
         return orderLineService.getAllOrderLinesById(id);
     }
 
-    @PostMapping("order_lines")
+    @PostMapping("order-lines")
     ResponseEntity<OrderLine> createOrderLines(@RequestBody OrderLine orderLine){
         return orderLineService.createOrderLines(orderLine);
     }
 
-    @PutMapping("order_lines/{id}")
+    @PutMapping("order-lines/{id}")
     ResponseEntity<OrderLine> updateOrderLines(@PathVariable int id,
                                                    @RequestParam(name = "productId",required = false) Integer productId,
                                                    @RequestParam(name = "orderId",required = false) Integer orderId,
@@ -41,7 +41,7 @@ public class OrderLineController {
         return orderLineService.updateOrderLines(id,productId,orderId,quantity,price);
     }
 
-    @DeleteMapping("order_lines/{id}")
+    @DeleteMapping("order-lines/{id}")
     ResponseEntity<OrderLine> deleteOrderLines(@PathVariable int id){
         return orderLineService.deleteOrderLines(id);
     }

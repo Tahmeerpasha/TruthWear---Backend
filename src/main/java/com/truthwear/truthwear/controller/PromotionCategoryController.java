@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/v1/")
 public class PromotionCategoryController {
     private final PromotionCategoryServiceImpl promotionCategoryService;
 
@@ -16,28 +16,28 @@ public class PromotionCategoryController {
         this.promotionCategoryService = promotionCategoryService;
     }
 
-    @GetMapping("/promotion_categories")
+    @GetMapping("promotion-categories")
     ResponseEntity<List<PromotionCategory>> getAllPromotionCategory(){
         return promotionCategoryService.getAllPromotionCategory();
     }
-    @GetMapping("/promotion_categories/{id}")
+    @GetMapping("promotion-categories/{id}")
     ResponseEntity<PromotionCategory> getAllPromotionCategory(@PathVariable int id){
         return promotionCategoryService.getPromotionCategoryById(id);
     }
 
-    @PostMapping("/promotion_categories")
+    @PostMapping("promotion-categories")
     ResponseEntity<PromotionCategory> createPromotionCategory(@RequestBody PromotionCategory promotionCategory){
         return promotionCategoryService.createPromotionCategory(promotionCategory);
     }
 
-    @PutMapping("/promotion_categories/{id}")
+    @PutMapping("promotion-categories/{id}")
     ResponseEntity<PromotionCategory> updatePromotionCategory(
             @RequestParam(name = "categoryId", required = false) Integer categoryId,
             @RequestParam(name = "promotionId", required = false) Integer promotionId,
             @PathVariable int id){
         return promotionCategoryService.updatePromotionCategory(id,categoryId,promotionId);
     }
-    @DeleteMapping("/promotion_categories/{id}")
+    @DeleteMapping("promotion-categories/{id}")
     ResponseEntity<PromotionCategory> deletePromotionCategory(@PathVariable int id){
         return promotionCategoryService.deletePromotionCategory(id);
     }

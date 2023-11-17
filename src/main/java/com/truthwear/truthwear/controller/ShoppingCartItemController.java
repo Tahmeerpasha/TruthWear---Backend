@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/v1/")
 public class ShoppingCartItemController {
     private final ShoppingCartItemServiceImpl shoppingCartItemService;
 
@@ -18,22 +18,22 @@ public class ShoppingCartItemController {
         this.shoppingCartItemService = shoppingCartItemService;
     }
 
-    @GetMapping("/shopping_cart_items")
+    @GetMapping("shopping-cart-items")
     ResponseEntity<List<ShoppingCartItem>> getAllShoppingCartItem() {
         return shoppingCartItemService.getAllShoppingCartItem();
     }
 
-    @GetMapping("/shopping_cart_items/{cartId}")
+    @GetMapping("shopping-cart-items/{cartId}")
     ResponseEntity<List<ShoppingCartItem>> getAllShoppingCartItemByCartId(@PathVariable int cartId) {
         return shoppingCartItemService.getAllShoppingCartItemByCartId(cartId);
     }
 
-    @PostMapping("/shopping_cart_items")
+    @PostMapping("shopping-cart-items")
     ResponseEntity<ShoppingCartItem> createShoppingCartItem(@RequestBody ShoppingCartItem shoppingCartItem){
         return shoppingCartItemService.createShoppingCartItem(shoppingCartItem);
     }
 
-    @PutMapping("/shopping_cart_items/{id}")
+    @PutMapping("shopping-cart-items/{id}")
     ResponseEntity<ShoppingCartItem> updateShoppingCartItem(@PathVariable int id,
                                                             @RequestParam(name = "cartId", required = false) Integer cartId,
                                                             @RequestParam(name = "productId", required = false) Integer productId,
@@ -42,12 +42,12 @@ public class ShoppingCartItemController {
         return shoppingCartItemService.updateShoppingCartItem(id,cartId,productId,quantity);
     }
 
-    @DeleteMapping("/shopping_cart_items/{id}")
+    @DeleteMapping("shopping-cart-items/{id}")
     ResponseEntity<ShoppingCartItem> deleteShoppingCartItem(@PathVariable int id){
         return shoppingCartItemService.deleteShoppingCartItem(id);
     }
 
-    @DeleteMapping("/shopping_cart_items/cart/{cartId}")
+    @DeleteMapping("shopping-cart-items/cart/{cartId}")
     ResponseEntity<List<ShoppingCartItem>> deleteShoppingCartItemsByCartId(@PathVariable int cartId)
     {
         return shoppingCartItemService.deleteShoppingCartItemByCartId(cartId);

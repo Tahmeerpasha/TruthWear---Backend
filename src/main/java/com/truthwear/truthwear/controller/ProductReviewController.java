@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/v1/")
 public class ProductReviewController {
     private final ProductReviewServiceImpl productReviewService;
 
@@ -18,52 +18,52 @@ public class ProductReviewController {
         this.productReviewService = productReviewService;
     }
 
-    @GetMapping("/reviews")
+    @GetMapping("reviews")
     List<ProductReviews> getAllReviews(){
         return productReviewService.getAllReviews();
     }
 
 
 //    Get reviews based on user ID
-    @GetMapping("/reviews/user/{userId}")
+    @GetMapping("reviews/user/{userId}")
     ResponseEntity<List<ProductReviews>> getProductReviewBasedOnUserId(@PathVariable int userId){
         return productReviewService.getProductReviewBasedOnUserId(userId);
     }
 //    Get Reviews based on product ID
-    @GetMapping("/reviews/product/{productId}")
+    @GetMapping("reviews/product/{productId}")
     ResponseEntity<List<ProductReviews>> getProductReviewBasedOnProductId(@PathVariable int productId){
         return productReviewService.getProductReviewBasedOnProductId(productId);
     }
 
-    @GetMapping("/reviews/{id}")
+    @GetMapping("reviews/{id}")
     ResponseEntity<ProductReviews> getProductReviewById(@PathVariable int id){
         return productReviewService.getProductReviewById(id);
     }
 
 
-    @PostMapping("/reviews")
+    @PostMapping("reviews")
     ResponseEntity<ProductReviews> createReviews(@RequestBody ProductReviews productReviews){
         return productReviewService.createReviews(productReviews);
     }
 
-    @PutMapping("/reviews/{id}")
+    @PutMapping("reviews/{id}")
     ResponseEntity<ProductReviews> updateReviews(@PathVariable int id,@RequestParam(name = "ratingValue", required = false) Integer ratingValue, @RequestParam(name = "comments", required = false) String comments){
         return productReviewService.updateReviews(id,ratingValue,comments);
     }
 
-    @DeleteMapping("/reviews/{id}")
+    @DeleteMapping("reviews/{id}")
     ResponseEntity<ProductReviews> deleteReviewById(@PathVariable int id){
         return productReviewService.deleteReviewById(id);
     }
 
 //    Delete all reviews of a particular user
-    @DeleteMapping("/reviews/user/{userId}")
+    @DeleteMapping("reviews/user/{userId}")
     ResponseEntity<List<ProductReviews>> deleteReviewByUserId(@PathVariable int userId){
         return productReviewService.deleteReviewByUserId(userId);
     }
 
 //    Delete all reviews of a particular product
-    @DeleteMapping("/reviews/product/{productId}")
+    @DeleteMapping("reviews/product/{productId}")
     ResponseEntity<List<ProductReviews>> deleteReviewByProductId(@PathVariable int productId){
         return productReviewService.deleteReviewByProductId(productId);
     }

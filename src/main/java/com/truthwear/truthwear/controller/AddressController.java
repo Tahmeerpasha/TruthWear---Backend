@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/v1/")
 public class AddressController {
 
     private final AddressServiceImpl addressService;
@@ -16,12 +16,12 @@ public class AddressController {
         this.addressService = addressService;
     }
 
-    @GetMapping("/addresses/{id}")
+    @GetMapping("addresses/{id}")
     public List<Address> getAllAddress(@PathVariable int id){
         return addressService.getAllAddress(id);
     }
 
-    @PostMapping("/addresses/{id}")
+    @PostMapping("addresses/{id}")
     public Address createAddress(@RequestBody Address address, @PathVariable int id){
         Address returnedAddress = addressService.createAddress(address, id);
 
@@ -30,7 +30,7 @@ public class AddressController {
         return returnedAddress;
     }
 
-    @PutMapping("/addresses/{id}")
+    @PutMapping("addresses/{id}")
     public Address updateAddress(@RequestBody Address address, @PathVariable int id){
         Address returnedAddress = addressService.updateAddress(address, id);
 
@@ -39,7 +39,7 @@ public class AddressController {
         return returnedAddress;
     }
 
-    @DeleteMapping("/addresses/{id}")
+    @DeleteMapping("addresses/{id}")
     public Address deleteAddress(@PathVariable int id){
        return addressService.deleteAddress(id);
     }
