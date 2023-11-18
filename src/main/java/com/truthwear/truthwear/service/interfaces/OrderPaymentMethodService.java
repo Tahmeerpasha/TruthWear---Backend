@@ -6,13 +6,13 @@ import org.springframework.http.ResponseEntity;
 import java.util.List;
 
 public interface OrderPaymentMethodService {
-    ResponseEntity<List<OrderPaymentMethod>> getAllOrderPaymentMethods();
+    List<OrderPaymentMethod> getAllOrderPaymentMethods();
 
-    ResponseEntity<OrderPaymentMethod> getAllOrderPaymentMethod(int id);
+    OrderPaymentMethod getOrderPaymentMethodById(int id);
 
-    ResponseEntity<OrderPaymentMethod> createOrderPaymentMethod(OrderPaymentMethod orderPaymentMethod);
+    OrderPaymentMethod createOrderPaymentMethod(OrderPaymentMethod orderPaymentMethod);
 
-    ResponseEntity<OrderPaymentMethod> updateOrderPaymentMethod(int id, Integer orderId, Integer userPaymentMethodId);
+    OrderPaymentMethod updateOrderPaymentMethod(int id, Integer orderId, Integer userPaymentMethodId);
 
-    ResponseEntity<OrderPaymentMethod> deleteOrderPaymentMethod(int id);
+    OrderPaymentMethod deleteOrderPaymentMethod(int id);
 }

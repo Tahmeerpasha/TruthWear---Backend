@@ -5,7 +5,7 @@ import com.truthwear.truthwear.entity.ProductCategory;
 import com.truthwear.truthwear.repository.ProductCategoryRepository;
 import com.truthwear.truthwear.repository.ProductRepository;
 import com.truthwear.truthwear.service.interfaces.ProductService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -19,22 +19,14 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class ProductServiceImpl implements ProductService{
 
     @Value("${upload.path}")
     private String uploadDirectory;
+    private final ProductCategoryRepository productCategoryRepository;
+    private final ProductRepository productRepository;
 
-    private ProductCategoryRepository productCategoryRepository;
-    private ProductRepository productRepository;
-
-    public ProductServiceImpl() {
-    }
-
-    @Autowired
-    public ProductServiceImpl(ProductRepository productRepository, ProductCategoryRepository productCategoryRepository) {
-        this.productRepository = productRepository;
-        this.productCategoryRepository = productCategoryRepository;
-    }
     @Override
     public List<Product> getAllProducts() {
         return productRepository.findAll();

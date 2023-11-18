@@ -5,12 +5,11 @@ import com.truthwear.truthwear.entity.SiteUser;
 import com.truthwear.truthwear.repository.ShoppingCartRepository;
 import com.truthwear.truthwear.repository.SiteUserRepository;
 import com.truthwear.truthwear.service.interfaces.ShoppingCartService;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -19,40 +18,57 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     private final ShoppingCartRepository shoppingCartRepository;
     private final SiteUserRepository siteUserRepository;
 
+    // Get all shopping carts
     @Override
-    public ResponseEntity<List<ShoppingCart>> getAllShoppingCart() {
-        return ResponseEntity.ok(shoppingCartRepository.findAll());
+    public List<ShoppingCart> getAllShoppingCart() {
+        return shoppingCartRepository.findAll();
     }
 
+    // Get a specific shopping cart by id
     @Override
-    public ResponseEntity<ShoppingCart> getShoppingCartById(int id) {
-        return ResponseEntity.ok(shoppingCartRepository.findById(id).get());
+    public ShoppingCart getShoppingCartById(int id) {
+        Optional<ShoppingCart> shoppingCartOptional = shoppingCartRepository.findById(id);
+        return shoppingCartOptional.orElse(null);
     }
 
+    // Get a shopping cart by user id
     @Override
-    public ResponseEntity<ShoppingCart> getShoppingCartByUserId(int userId) {
-        return ResponseEntity.ok(shoppingCartRepository.findByUserId(userId));
+    public ShoppingCart getShoppingCartByUserId(int userId) {
+        return shoppingCartRepository.findByUserId(userId);
     }
 
+    // Create a new shopping cart
     @Override
-    public ResponseEntity<ShoppingCart> createShoppingCart(ShoppingCart shoppingCart) {
-        return ResponseEntity.ok(shoppingCartRepository.save(shoppingCart));
+    public ShoppingCart createShoppingCart(ShoppingCart shoppingCart) {
+        return shoppingCartRepository.save(shoppingCart);
     }
 
+    // Update an existing shopping cart
     @Override
-    public ResponseEntity<ShoppingCart> updateShoppingCart(int id, int userId) {
-        ShoppingCart shoppingCart = shoppingCartRepository.findById(id).get();
-        SiteUser siteUser = siteUserRepository.findById(userId).get();
+    public ShoppingCart updateShoppingCart(int id, int userId) {
+        Optional<ShoppingCart> shoppingCartOptional = shoppingCartRepository.findById(id);
+        if (shoppingCartOptional.isEmpty()) {
+            return null;
+        }
+        ShoppingCart shoppingCart = shoppingCartOptional.get();
+        Optional<SiteUser> siteUserOptional = siteUserRepository.findById(userId);
+        if (siteUserOptional.isEmpty()) {
+            return null;
+        }
+        SiteUser siteUser = siteUserOptional.get();
         shoppingCart.setUser(siteUser);
-        if (userId != 0)return ResponseEntity.ok(shoppingCartRepository.save(shoppingCart));
-        else return ResponseEntity.internalServerError().build();
+        return shoppingCartRepository.save(shoppingCart);
     }
 
+    // Delete a shopping cart by id
     @Override
-    public ResponseEntity<ShoppingCart> deleteShoppingCart(int id) {
-        ShoppingCart shoppingCart = shoppingCartRepository.findById(id).get();
+    public ShoppingCart deleteShoppingCart(int id) {
+        Optional<ShoppingCart> shoppingCartOptional = shoppingCartRepository.findById(id);
+        if (shoppingCartOptional.isEmpty()) {
+            return null;
+        }
+        ShoppingCart shoppingCart = shoppingCartOptional.get();
         shoppingCartRepository.delete(shoppingCart);
-        return ResponseEntity.ok(shoppingCart);
+        return shoppingCart;
     }
-
 }

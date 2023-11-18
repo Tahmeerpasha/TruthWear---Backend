@@ -6,15 +6,15 @@ import org.springframework.http.ResponseEntity;
 import java.util.List;
 
 public interface ShoppingCartItemService {
-    ResponseEntity<List<ShoppingCartItem>> getAllShoppingCartItem();
+    List<ShoppingCartItem> getAllShoppingCartItem();
 
-    ResponseEntity<List<ShoppingCartItem>> getAllShoppingCartItemByCartId(int cartId);
+    List<ShoppingCartItem> getAllShoppingCartItemByCartId(int cartId);
 
-    ResponseEntity<ShoppingCartItem> createShoppingCartItem(ShoppingCartItem shoppingCartItem);
+    ShoppingCartItem createShoppingCartItem(ShoppingCartItem shoppingCartItem);
 
-    ResponseEntity<ShoppingCartItem> updateShoppingCartItem(int id, Integer cartId, Integer productId, Integer quantity);
+    ShoppingCartItem updateShoppingCartItem(int id, Integer cartId, Integer productId, Integer quantity);
 
-    ResponseEntity<ShoppingCartItem> deleteShoppingCartItem(int id);
+    ShoppingCartItem deleteShoppingCartItem(int id);
 
-    ResponseEntity<List<ShoppingCartItem>> deleteShoppingCartItemByCartId(int cartId);
+    List<ShoppingCartItem> deleteShoppingCartItemByCartId(int cartId);
 }

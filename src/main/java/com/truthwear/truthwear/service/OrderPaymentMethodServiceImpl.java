@@ -8,10 +8,10 @@ import com.truthwear.truthwear.repository.ShopOrderRepository;
 import com.truthwear.truthwear.repository.UserPaymentMethodRepository;
 import com.truthwear.truthwear.service.interfaces.OrderPaymentMethodService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -20,41 +20,53 @@ public class OrderPaymentMethodServiceImpl implements OrderPaymentMethodService 
     private final ShopOrderRepository shopOrderRepository;
     private final UserPaymentMethodRepository userPaymentMethodRepository;
 
+    // Get all order payment methods
     @Override
-    public ResponseEntity<List<OrderPaymentMethod>> getAllOrderPaymentMethods() {
-        return ResponseEntity.ok(orderPaymentMethodRepository.findAll());
+    public List<OrderPaymentMethod> getAllOrderPaymentMethods() {
+        return orderPaymentMethodRepository.findAll();
     }
 
+    // Get a specific order payment method by id
     @Override
-    public ResponseEntity<OrderPaymentMethod> getAllOrderPaymentMethod(int id) {
-        return ResponseEntity.ok(orderPaymentMethodRepository.findById(id).get());
+    public OrderPaymentMethod getOrderPaymentMethodById(int id) {
+        Optional<OrderPaymentMethod> orderPaymentMethod = orderPaymentMethodRepository.findById(id);
+        return orderPaymentMethod.orElse(null);
     }
 
+    // Create a new order payment method
     @Override
-    public ResponseEntity<OrderPaymentMethod> createOrderPaymentMethod(OrderPaymentMethod orderPaymentMethod) {
-        return ResponseEntity.ok(orderPaymentMethodRepository.save(orderPaymentMethod));
+    public OrderPaymentMethod createOrderPaymentMethod(OrderPaymentMethod orderPaymentMethod) {
+        return orderPaymentMethodRepository.save(orderPaymentMethod);
     }
 
+    // Update an existing order payment method
     @Override
-    public ResponseEntity<OrderPaymentMethod> updateOrderPaymentMethod(int id, Integer orderId, Integer userPaymentMethodId) {
-        OrderPaymentMethod orderPaymentMethod = orderPaymentMethodRepository.findById(id).get();
+    public OrderPaymentMethod updateOrderPaymentMethod(int id, Integer orderId, Integer userPaymentMethodId) {
+        Optional<OrderPaymentMethod> orderPaymentMethodOptional = orderPaymentMethodRepository.findById(id);
+        if (orderPaymentMethodOptional.isEmpty()) {
+            return null;
+        }
+        OrderPaymentMethod orderPaymentMethod = orderPaymentMethodOptional.get();
         if (orderId != null) {
-            ShopOrder shopOrder = shopOrderRepository.findById(orderId).get();
-            orderPaymentMethod.setShopOrder(shopOrder);
+            Optional<ShopOrder> shopOrderOptional = shopOrderRepository.findById(orderId);
+            shopOrderOptional.ifPresent(orderPaymentMethod::setShopOrder);
         }
         if (userPaymentMethodId != null) {
-            UserPaymentMethod userPaymentMethod = userPaymentMethodRepository.findById(userPaymentMethodId).get();
-            orderPaymentMethod.setUserPaymentMethod(userPaymentMethod);
+            Optional<UserPaymentMethod> userPaymentMethodOptional = userPaymentMethodRepository.findById(userPaymentMethodId);
+            userPaymentMethodOptional.ifPresent(orderPaymentMethod::setUserPaymentMethod);
         }
-        return ResponseEntity.ok(orderPaymentMethodRepository.save(orderPaymentMethod));
+        return orderPaymentMethodRepository.save(orderPaymentMethod);
     }
 
+    // Delete an existing order payment method
     @Override
-    public ResponseEntity<OrderPaymentMethod> deleteOrderPaymentMethod(int id) {
-        OrderPaymentMethod orderPaymentMethod = orderPaymentMethodRepository.findById(id).get();
+    public OrderPaymentMethod deleteOrderPaymentMethod(int id) {
+        Optional<OrderPaymentMethod> orderPaymentMethodOptional = orderPaymentMethodRepository.findById(id);
+        if (orderPaymentMethodOptional.isEmpty()) {
+            return null;
+        }
+        OrderPaymentMethod orderPaymentMethod = orderPaymentMethodOptional.get();
         orderPaymentMethodRepository.delete(orderPaymentMethod);
-        return ResponseEntity.ok(orderPaymentMethod);
+        return orderPaymentMethod;
     }
-
-
 }

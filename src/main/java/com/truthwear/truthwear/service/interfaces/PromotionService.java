@@ -7,13 +7,13 @@ import java.sql.Timestamp;
 import java.util.List;
 
 public interface PromotionService {
-    ResponseEntity<List<Promotion>> getAllPromotions();
+    List<Promotion> getAllPromotions();
 
-    ResponseEntity<Promotion> getPromotionsById(int id);
+    Promotion getPromotionsById(int id);
 
-    ResponseEntity<Promotion> createPromotion(Promotion promotion);
+    Promotion createPromotion(Promotion promotion);
 
-    ResponseEntity<Promotion> updatePromotion(int id, String promotionName, String promotionDescription, Integer discountRate, Timestamp startDate, Timestamp endDate);
+    Promotion updatePromotion(int id, String promotionName, String promotionDescription, Integer discountRate, Timestamp startDate, Timestamp endDate);
 
-    ResponseEntity<Promotion> deletePromotion(int id);
+    Promotion deletePromotion(int id);
 }

@@ -3,45 +3,61 @@ package com.truthwear.truthwear.service;
 import com.truthwear.truthwear.entity.OrderStatus;
 import com.truthwear.truthwear.repository.OrderStatusRepository;
 import com.truthwear.truthwear.service.interfaces.OrderStatusService;
-import org.springframework.http.ResponseEntity;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class OrderStatusServiceImpl implements OrderStatusService {
+
     private final OrderStatusRepository orderStatusRepository;
 
-    public OrderStatusServiceImpl(OrderStatusRepository orderStatusRepository) {
-        this.orderStatusRepository = orderStatusRepository;
-    }
-
+    // Get all order statuses
     @Override
-    public ResponseEntity<List<OrderStatus>> getAllOrderStatus() {
-        return ResponseEntity.ok(orderStatusRepository.findAll());
+    public List<OrderStatus> getAllOrderStatus() {
+        return orderStatusRepository.findAll();
     }
 
+    // Get a specific order status by id
     @Override
-    public ResponseEntity<OrderStatus> getAllOrderStatusById(int id) {
-        return ResponseEntity.ok(orderStatusRepository.findById(id).get());
+    public OrderStatus getAllOrderStatusById(int id) {
+        Optional<OrderStatus> orderStatusOptional = orderStatusRepository.findById(id);
+        return orderStatusOptional.orElse(null);
     }
 
+    // Create a new order status
     @Override
-    public ResponseEntity<OrderStatus> createOrderStatus(OrderStatus orderStatus) {
-        return ResponseEntity.ok(orderStatusRepository.save(orderStatus));
+    public OrderStatus createOrderStatus(OrderStatus orderStatus) {
+        return orderStatusRepository.save(orderStatus);
     }
 
-    public ResponseEntity<OrderStatus> updateOrderStatus(int id, String orderStatus) {
-        OrderStatus orderStatus1 = orderStatusRepository.findById(id).get();
-        if (orderStatus == null)return ResponseEntity.badRequest().build();
-        else orderStatus1.setOrderStatus(orderStatus);
-        return ResponseEntity.ok(orderStatusRepository.save(orderStatus1));
-    }
-
+    // Update an existing order status
     @Override
-    public ResponseEntity<OrderStatus> deleteOrderStatusById(int id) {
-        OrderStatus orderStatus = orderStatusRepository.findById(id).get();
+    public OrderStatus updateOrderStatus(int id, String orderStatus) {
+        Optional<OrderStatus> orderStatusOptional = orderStatusRepository.findById(id);
+        if (orderStatusOptional.isEmpty()) {
+            return null;
+        }
+        OrderStatus existingOrderStatus = orderStatusOptional.get();
+        if (orderStatus != null) {
+            existingOrderStatus.setOrderStatus(orderStatus);
+            return orderStatusRepository.save(existingOrderStatus);
+        }
+        return null;
+    }
+
+    // Delete an order status by id
+    @Override
+    public OrderStatus deleteOrderStatusById(int id) {
+        Optional<OrderStatus> orderStatusOptional = orderStatusRepository.findById(id);
+        if (orderStatusOptional.isEmpty()) {
+            return null;
+        }
+        OrderStatus orderStatus = orderStatusOptional.get();
         orderStatusRepository.delete(orderStatus);
-        return ResponseEntity.ok(orderStatus);
+        return orderStatus;
     }
 }

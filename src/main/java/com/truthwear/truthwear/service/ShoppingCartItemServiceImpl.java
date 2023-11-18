@@ -8,10 +8,10 @@ import com.truthwear.truthwear.repository.ShoppingCartItemRepository;
 import com.truthwear.truthwear.repository.ShoppingCartRepository;
 import com.truthwear.truthwear.service.interfaces.ShoppingCartItemService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -21,49 +21,65 @@ public class ShoppingCartItemServiceImpl implements ShoppingCartItemService {
     private final ShoppingCartRepository shoppingCartRepository;
     private final ProductRepository productRepository;
 
+    // Get all shopping cart items
     @Override
-    public ResponseEntity<List<ShoppingCartItem>> getAllShoppingCartItem() {
-        return ResponseEntity.ok(shoppingCartItemRepository.findAll());
+    public List<ShoppingCartItem> getAllShoppingCartItem() {
+        return shoppingCartItemRepository.findAll();
     }
 
+    // Get all shopping cart items by cart id
     @Override
-    public ResponseEntity<List<ShoppingCartItem>> getAllShoppingCartItemByCartId(int cartId) {
-        return ResponseEntity.ok(shoppingCartItemRepository.findAllByCartId(cartId));
+    public List<ShoppingCartItem> getAllShoppingCartItemByCartId(int cartId) {
+        return shoppingCartItemRepository.findAllByCartId(cartId);
     }
 
+    // Create a new shopping cart item
     @Override
-    public ResponseEntity<ShoppingCartItem> createShoppingCartItem(ShoppingCartItem shoppingCartItem) {
-        return ResponseEntity.ok(shoppingCartItemRepository.save(shoppingCartItem));
+    public ShoppingCartItem createShoppingCartItem(ShoppingCartItem shoppingCartItem) {
+        return shoppingCartItemRepository.save(shoppingCartItem);
     }
 
+    // Update an existing shopping cart item
     @Override
-    public ResponseEntity<ShoppingCartItem> updateShoppingCartItem(int id, Integer cartId, Integer productId, Integer quantity) {
-        ShoppingCartItem shoppingCartItem = shoppingCartItemRepository.findById(id).get();
+    public ShoppingCartItem updateShoppingCartItem(int id, Integer cartId, Integer productId, Integer quantity) {
+        Optional<ShoppingCartItem> shoppingCartItemOptional = shoppingCartItemRepository.findById(id);
+        if (shoppingCartItemOptional.isEmpty()) {
+            return null;
+        }
+        ShoppingCartItem shoppingCartItem = shoppingCartItemOptional.get();
         if (cartId != null) {
-            ShoppingCart shoppingCart = shoppingCartRepository.findById(cartId).get();
-            shoppingCartItem.setCart(shoppingCart);
+            Optional<ShoppingCart> shoppingCartOptional = shoppingCartRepository.findById(cartId);
+            shoppingCartOptional.ifPresent(shoppingCartItem::setCart);
         }
         if (productId != null) {
-            Product product = productRepository.findById(productId).get();
-            shoppingCartItem.setProduct(product);
+            Optional<Product> productOptional = productRepository.findById(productId);
+            productOptional.ifPresent(shoppingCartItem::setProduct);
         }
-        if (quantity != null)
+        if (quantity != null) {
             shoppingCartItem.setQuantity(quantity);
-
-        return ResponseEntity.ok(shoppingCartItemRepository.save(shoppingCartItem));
+        }
+        return shoppingCartItemRepository.save(shoppingCartItem);
     }
 
+    // Delete a shopping cart item by id
     @Override
-    public ResponseEntity<ShoppingCartItem> deleteShoppingCartItem(int id) {
-        ShoppingCartItem shoppingCartItem = shoppingCartItemRepository.findById(id).get();
+    public ShoppingCartItem deleteShoppingCartItem(int id) {
+        Optional<ShoppingCartItem> shoppingCartItemOptional = shoppingCartItemRepository.findById(id);
+        if (shoppingCartItemOptional.isEmpty()) {
+            return null;
+        }
+        ShoppingCartItem shoppingCartItem = shoppingCartItemOptional.get();
         shoppingCartItemRepository.delete(shoppingCartItem);
-        return ResponseEntity.ok(shoppingCartItem);
+        return shoppingCartItem;
     }
 
+    // Delete all shopping cart items by cart id
     @Override
-    public ResponseEntity<List<ShoppingCartItem>> deleteShoppingCartItemByCartId(int cartId) {
+    public List<ShoppingCartItem> deleteShoppingCartItemByCartId(int cartId) {
         List<ShoppingCartItem> shoppingCartItem = shoppingCartItemRepository.findAllByCartId(cartId);
-        shoppingCartItemRepository.deleteAll(shoppingCartItem);
-        return ResponseEntity.ok(shoppingCartItem);
+        if (shoppingCartItem != null && !shoppingCartItem.isEmpty()) {
+            shoppingCartItemRepository.deleteAll(shoppingCartItem);
+        }
+        return shoppingCartItem;
     }
 }

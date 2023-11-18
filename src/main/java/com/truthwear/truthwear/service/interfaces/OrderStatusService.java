@@ -6,10 +6,10 @@ import org.springframework.http.ResponseEntity;
 import java.util.List;
 
 public interface OrderStatusService {
-    ResponseEntity<List<OrderStatus>> getAllOrderStatus();
-    ResponseEntity<OrderStatus> getAllOrderStatusById(int id);
-    ResponseEntity<OrderStatus> createOrderStatus(OrderStatus orderStatus);
-    ResponseEntity<OrderStatus> updateOrderStatus(int id, String orderStatus);
+    List<OrderStatus> getAllOrderStatus();
+    OrderStatus getAllOrderStatusById(int id);
+    OrderStatus createOrderStatus(OrderStatus orderStatus);
+    OrderStatus updateOrderStatus(int id, String orderStatus);
 
-    ResponseEntity<OrderStatus> deleteOrderStatusById(int id);
+    OrderStatus deleteOrderStatusById(int id);
 }

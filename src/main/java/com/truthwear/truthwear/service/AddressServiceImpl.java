@@ -8,68 +8,68 @@ import com.truthwear.truthwear.repository.UserAddressRepository;
 import com.truthwear.truthwear.repository.SiteUserRepository;
 import com.truthwear.truthwear.service.interfaces.AddressService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.NoSuchElementException;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class AddressServiceImpl implements AddressService {
 
-    private AddressRepository addressRepository;
-    private SiteUserRepository siteUserRepository;
+    private final AddressRepository addressRepository;
+    private final SiteUserRepository siteUserRepository;
+    private final UserAddressRepository userAddressRepository;
 
-    private UserAddressRepository userAddressRepository;
+    // Get all addresses for a user
     @Override
-    public List<Address> getAllAddress(int id) {
+    public List<Address> getAllAddresses(int id) {
         List<UserAddress> userAddress;
         List<Address> addresses = new ArrayList<>();
-        try {
-            userAddress = userAddressRepository.findByUserId(id);
-            userAddress.stream().map(userAddress1 -> addressRepository.findById(userAddress1.getId()).get())
-                    .forEach(addresses::add);
-        }catch (NoSuchElementException e){
-            System.out.println(e);
-            return null;
-        }
+        userAddress = userAddressRepository.findByUserId(id);
+        userAddress.stream().map(userAddress1 -> addressRepository.findById(userAddress1.getId()).orElse(null))
+                .forEach(addresses::add);
         return addresses;
     }
 
+    // Create a new address for a user
     @Override
     public Address createAddress(Address address, int id) {
-        SiteUser siteUser;
-        try {
-            siteUser = siteUserRepository.findById(id).get();
-        }catch (NoSuchElementException e){
-            System.out.println(e);
+        Optional<SiteUser> siteUserOptional = siteUserRepository.findById(id);
+        if (siteUserOptional.isEmpty()) {
             return null;
         }
+        SiteUser siteUser = siteUserOptional.get();
         Address newAddress = addressRepository.save(address);
         UserAddress userAddress = new UserAddress(siteUser, newAddress,0);
         userAddressRepository.save(userAddress);
         return newAddress;
     }
 
+    // Update an existing address
     @Override
     public Address updateAddress(Address address, int id) {
         address.setId(id);
         return addressRepository.save(address);
     }
 
+    // Delete an address
     @Override
     public Address deleteAddress(int id) {
-//        First delete entry in user-address table then delete address, to ensure referential integrity
-        UserAddress userAddress = userAddressRepository.findByAddressId(id);
+        Optional<UserAddress> userAddressOptional = Optional.ofNullable(userAddressRepository.findByAddressId(id));
+        if (userAddressOptional.isEmpty()) {
+            return null;
+        }
+        UserAddress userAddress = userAddressOptional.get();
         userAddressRepository.delete(userAddress);
-        System.out.println(userAddress);
 
-        Address address = addressRepository.findById(id).get();
+        Optional<Address> addressOptional = addressRepository.findById(id);
+        if (addressOptional.isEmpty()) {
+            return null;
+        }
+        Address address = addressOptional.get();
         addressRepository.delete(address);
-        System.out.println(address);
-
         return address;
     }
 }

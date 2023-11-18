@@ -7,13 +7,13 @@ import java.util.List;
 
 public interface PromotionCategoryService {
 
-    ResponseEntity<List<PromotionCategory>> getAllPromotionCategory();
+    List<PromotionCategory> getAllPromotionCategory();
 
-    ResponseEntity<PromotionCategory> getPromotionCategoryById(int id);
+    PromotionCategory getPromotionCategoryById(int id);
 
-    ResponseEntity<PromotionCategory> createPromotionCategory(PromotionCategory promotionCategory);
+    PromotionCategory createPromotionCategory(PromotionCategory promotionCategory);
 
-    ResponseEntity<PromotionCategory> deletePromotionCategory(int id);
+    PromotionCategory deletePromotionCategory(int id);
 
-    ResponseEntity<PromotionCategory> updatePromotionCategory(int id,Integer categoryId, Integer promotionId);
+    PromotionCategory updatePromotionCategory(int id,Integer categoryId, Integer promotionId);
 }

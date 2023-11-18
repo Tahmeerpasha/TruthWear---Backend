@@ -4,12 +4,12 @@ import com.truthwear.truthwear.entity.*;
 import com.truthwear.truthwear.repository.*;
 import com.truthwear.truthwear.service.interfaces.ShopOrderService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -20,56 +20,76 @@ public class ShopOrderServiceImpl implements ShopOrderService {
     private final AddressRepository addressRepository;
     private final ShippingMethodRepository shippingMethodRepository;
     private final OrderStatusRepository orderStatusRepository;
+
+    // Get all shop orders
     @Override
-    public ResponseEntity<List<ShopOrder>> getAllShopOrders() {
-        return ResponseEntity.ok(shopOrderRepository.findAll());
-    }
-    @Override
-    public ResponseEntity<ShopOrder> getAllShopOrdersById(int id) {
-        return ResponseEntity.ok(shopOrderRepository.findById(id).get());
-    }
-    @Override
-    public ResponseEntity<List<ShopOrder>> getAllShopOrdersByUserId(int userId) {
-        return ResponseEntity.ok(shopOrderRepository.findAllByUserId(userId));
+    public List<ShopOrder> getAllShopOrders() {
+        return shopOrderRepository.findAll();
     }
 
+    // Get a specific shop order by id
     @Override
-    public ResponseEntity<ShopOrder> createShopOrder(ShopOrder shopOrder) {
-            return ResponseEntity.ok(shopOrderRepository.save(shopOrder));
+    public ShopOrder getAllShopOrdersById(int id) {
+        Optional<ShopOrder> shopOrderOptional = shopOrderRepository.findById(id);
+        return shopOrderOptional.orElse(null);
     }
 
+    // Get all shop orders by user id
     @Override
-    public ResponseEntity<ShopOrder> updateShopOrder(int id, Timestamp orderDate,
-                                                     Integer shippingAddressId, Integer shippingMethodId,
-                                                     BigDecimal orderTotal, Integer orderStatus, Integer orderPaymentMethodId) {
-        ShopOrder shopOrder = shopOrderRepository.findById(id).get();
-        if (orderDate != null)shopOrder.setOrderDate(orderDate);
+    public List<ShopOrder> getAllShopOrdersByUserId(int userId) {
+        return shopOrderRepository.findAllByUserId(userId);
+    }
+
+    // Create a new shop order
+    @Override
+    public ShopOrder createShopOrder(ShopOrder shopOrder) {
+        return shopOrderRepository.save(shopOrder);
+    }
+
+    // Update an existing shop order
+    @Override
+    public ShopOrder updateShopOrder(int id, Timestamp orderDate,
+                                     Integer shippingAddressId, Integer shippingMethodId,
+                                     BigDecimal orderTotal, Integer orderStatus, Integer orderPaymentMethodId) {
+        Optional<ShopOrder> shopOrderOptional = shopOrderRepository.findById(id);
+        if (shopOrderOptional.isEmpty()) {
+            return null;
+        }
+        ShopOrder shopOrder = shopOrderOptional.get();
+        if (orderDate != null) {
+            shopOrder.setOrderDate(orderDate);
+        }
         if (orderPaymentMethodId != null) {
-            OrderPaymentMethod orderPaymentMethod = orderPaymentMethodRepository.findById(orderPaymentMethodId).get();
-            shopOrder.setOrderPaymentMethod(orderPaymentMethod);
+            Optional<OrderPaymentMethod> orderPaymentMethodOptional = orderPaymentMethodRepository.findById(orderPaymentMethodId);
+            orderPaymentMethodOptional.ifPresent(shopOrder::setOrderPaymentMethod);
         }
         if (shippingAddressId != null) {
-            Address address = addressRepository.findById(shippingAddressId).get();
-            shopOrder.setShippingAddress(address);
+            Optional<Address> addressOptional = addressRepository.findById(shippingAddressId);
+            addressOptional.ifPresent(shopOrder::setShippingAddress);
         }
         if (shippingMethodId != null) {
-            ShippingMethod shippingMethod = shippingMethodRepository.findById(shippingMethodId).get();
-            shopOrder.setShippingMethod(shippingMethod);
+            Optional<ShippingMethod> shippingMethodOptional = shippingMethodRepository.findById(shippingMethodId);
+            shippingMethodOptional.ifPresent(shopOrder::setShippingMethod);
         }
-        if (orderTotal != null)shopOrder.setOrderTotal(orderTotal);
+        if (orderTotal != null) {
+            shopOrder.setOrderTotal(orderTotal);
+        }
         if (orderStatus != null) {
-            OrderStatus orderStatus1 = orderStatusRepository.findById(orderStatus).get();
-            shopOrder.setOrderStatus(orderStatus1);
+            Optional<OrderStatus> orderStatusOptional = orderStatusRepository.findById(orderStatus);
+            orderStatusOptional.ifPresent(shopOrder::setOrderStatus);
         }
-        return ResponseEntity.ok(shopOrderRepository.save(shopOrder));
+        return shopOrderRepository.save(shopOrder);
     }
 
+    // Delete a shop order by id
     @Override
-    public ResponseEntity<ShopOrder> deleteShopOrder(int id) {
-        ShopOrder shopOrder = shopOrderRepository.findById(id).get();
+    public ShopOrder deleteShopOrder(int id) {
+        Optional<ShopOrder> shopOrderOptional = shopOrderRepository.findById(id);
+        if (shopOrderOptional.isEmpty()) {
+            return null;
+        }
+        ShopOrder shopOrder = shopOrderOptional.get();
         shopOrderRepository.delete(shopOrder);
-        return ResponseEntity.ok(shopOrder);
+        return shopOrder;
     }
-
-
 }

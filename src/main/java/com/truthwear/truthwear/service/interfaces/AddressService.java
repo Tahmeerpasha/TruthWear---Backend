@@ -5,7 +5,7 @@ import com.truthwear.truthwear.entity.Address;
 import java.util.List;
 
 public interface AddressService {
-    List<Address> getAllAddress(int id);
+    List<Address> getAllAddresses(int id);
 
     Address createAddress(Address address, int id);
 

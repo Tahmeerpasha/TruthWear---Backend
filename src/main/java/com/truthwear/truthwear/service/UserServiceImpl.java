@@ -3,66 +3,61 @@ package com.truthwear.truthwear.service;
 import com.truthwear.truthwear.entity.SiteUser;
 import com.truthwear.truthwear.repository.SiteUserRepository;
 import com.truthwear.truthwear.service.interfaces.UserService;
-import jakarta.transaction.Transactional;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.List;
+import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
-    private SiteUserRepository siteUserRepository;
 
-    public UserServiceImpl() {
-    }
+    private final SiteUserRepository siteUserRepository;
 
-    @Autowired
-    public UserServiceImpl(SiteUserRepository siteUserRepository) {
-        this.siteUserRepository = siteUserRepository;
-    }
+    // Save a new user
     @Override
     public SiteUser saveUser(SiteUser siteUser) {
-        if (siteUserRepository.existsByEmailId(siteUser.getEmailId()))
+        if (siteUserRepository.existsByEmailId(siteUser.getEmailId())) {
             throw new RuntimeException("User already exists");
-        else
+        } else {
             return siteUserRepository.save(siteUser);
+        }
     }
 
+    // Get all users
     @Override
     public List<SiteUser> getAllUsers() {
         return siteUserRepository.findAll();
     }
 
+    // Delete a user by id
     @Override
-    @Transactional
     public SiteUser deleteUser(int id) {
-        if (siteUserRepository.existsById(id)) {
-            SiteUser siteUser = siteUserRepository.findById(id).get();
-            siteUserRepository.deleteById(id);
-            return siteUser;
-        }
-        else
+        Optional<SiteUser> siteUserOptional = siteUserRepository.findById(id);
+        if (siteUserOptional.isEmpty()) {
             throw new RuntimeException("User does not exist");
+        }
+        SiteUser siteUser = siteUserOptional.get();
+        siteUserRepository.deleteById(id);
+        return siteUser;
     }
 
+    // Update an existing user
     @Override
-    public SiteUser updateUser(int id, SiteUser updatedSiteUser){
+    public SiteUser updateUser(int id, SiteUser updatedSiteUser) {
+        Optional<SiteUser> siteUserOptional = siteUserRepository.findById(id);
+        if (siteUserOptional.isEmpty()) {
+            throw new RuntimeException("User does not exist");
+        }
         updatedSiteUser.setId(id);
         return siteUserRepository.save(updatedSiteUser);
     }
 
+    // Get a specific user by id
     @Override
-    public ResponseEntity<?> getUserById(int id) {
-      if (siteUserRepository.existsById(id)){
-         SiteUser siteUser = siteUserRepository.findById(id).get();
-         return new ResponseEntity<>(siteUser, HttpStatus.OK);
-      }
-      else{
-          Map<String, String> errorResponse = new HashMap<>();
-          errorResponse.put("error", "User not found with id: " + id);
-          return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
-      }
+    public SiteUser getUserById(int id) {
+        Optional<SiteUser> siteUserOptional = siteUserRepository.findById(id);
+        return siteUserOptional.orElse(null);
     }
 }

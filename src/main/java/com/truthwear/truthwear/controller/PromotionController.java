@@ -2,6 +2,7 @@ package com.truthwear.truthwear.controller;
 
 import com.truthwear.truthwear.entity.Promotion;
 import com.truthwear.truthwear.service.PromotionServiceImpl;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -9,7 +10,7 @@ import java.sql.Timestamp;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/")
+@RequestMapping("/api/v1/promotions")
 public class PromotionController {
 
     private final PromotionServiceImpl promotionService;
@@ -18,36 +19,70 @@ public class PromotionController {
         this.promotionService = promotionService;
     }
 
-    @GetMapping("promotions")
-    ResponseEntity<List<Promotion>> getAllPromotions() {
-        return promotionService.getAllPromotions();
+    // Get all promotions
+    @GetMapping
+    public ResponseEntity<List<Promotion>> getAllPromotions() {
+        try {
+            List<Promotion> promotions = promotionService.getAllPromotions();
+            return ResponseEntity.ok(promotions);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
 
-    @GetMapping("promotions/{id}")
-    ResponseEntity<Promotion> getPromotionsById(@PathVariable int id) {
-        return promotionService.getPromotionsById(id);
+    // Get a specific promotion by id
+    @GetMapping("/{id}")
+    public ResponseEntity<Promotion> getPromotionsById(@PathVariable int id) {
+        try {
+            Promotion promotion = promotionService.getPromotionsById(id);
+            return ResponseEntity.ok(promotion);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
 
-    @PostMapping("promotions")
-    ResponseEntity<Promotion> createPromotion(@RequestBody Promotion promotion) {
-        return promotionService.createPromotion(promotion);
+    // Create a new promotion
+    @PostMapping
+    public ResponseEntity<Promotion> createPromotion(@RequestBody Promotion promotion) {
+        try {
+            Promotion createdPromotion = promotionService.createPromotion(promotion);
+            return ResponseEntity.status(HttpStatus.CREATED).body(createdPromotion);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
 
-    @PutMapping("promotions/{id}")
-    ResponseEntity<Promotion> updatePromotion(@RequestParam(name = "promotionName", required = false) String promotionName,
-                                              @RequestParam(name = "promotionDescription", required = false) String promotionDescription,
-                                              @RequestParam(name = "discountRate", required = false) Integer discountRate,
-                                              @RequestParam(name = "startDate", required = false) Timestamp startDate,
-                                              @RequestParam(name = "endDate", required = false) Timestamp endDate,
-                                              @PathVariable int id
+    // Update an existing promotion
+    @PutMapping("/{id}")
+    public ResponseEntity<Promotion> updatePromotion(@PathVariable int id,
+                                                     @RequestParam(required = false) String promotionName,
+                                                     @RequestParam(required = false) String promotionDescription,
+                                                     @RequestParam(required = false) Timestamp startDate,
+                                                     @RequestParam(required = false) Timestamp endDate,
+                                                     @RequestParam(required = false) Integer discount
     ) {
-        return promotionService.updatePromotion(id, promotionName, promotionDescription, discountRate, startDate, endDate);
+        try {
+            Promotion updatedPromotion = promotionService.updatePromotion(id, promotionName,promotionDescription, discount, startDate, endDate);
+            return ResponseEntity.ok(updatedPromotion);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
 
-    @DeleteMapping("promotions/{id}")
-    ResponseEntity<Promotion> deletePromotion(@PathVariable int id) {
-        return promotionService.deletePromotion(id);
+    // Delete a promotion by id
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Promotion> deletePromotion(@PathVariable int id) {
+        try {
+            Promotion deletedPromotion = promotionService.deletePromotion(id);
+            return ResponseEntity.ok(deletedPromotion);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
-
-
 }

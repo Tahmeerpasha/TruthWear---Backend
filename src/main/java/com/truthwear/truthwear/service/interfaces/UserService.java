@@ -14,5 +14,5 @@ public interface UserService {
 
      SiteUser updateUser(int id, SiteUser siteUser);
 
-     ResponseEntity<?> getUserById(int id);
+     SiteUser getUserById(int id);
 }

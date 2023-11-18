@@ -6,13 +6,13 @@ import org.springframework.http.ResponseEntity;
 import java.util.List;
 
 public interface OrderLineService {
-    ResponseEntity<List<OrderLine>> getAllOrderLines();
+    List<OrderLine> getAllOrderLines();
 
-    ResponseEntity<OrderLine> getAllOrderLinesById(int id);
+    OrderLine getOrderLineById(int id);
 
-    ResponseEntity<OrderLine> createOrderLines(OrderLine orderLine);
+    OrderLine createOrderLine(OrderLine orderLine);
 
-    ResponseEntity<OrderLine> updateOrderLines(int id, Integer productId, Integer orderId, Integer quantity, Integer price);
+    OrderLine updateOrderLine(int id, Integer productId, Integer orderId, Integer quantity, Integer price);
 
-    ResponseEntity<OrderLine> deleteOrderLines(int id);
+    OrderLine deleteOrderLine(int id);
 }

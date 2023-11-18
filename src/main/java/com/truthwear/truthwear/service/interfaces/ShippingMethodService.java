@@ -7,13 +7,13 @@ import java.math.BigDecimal;
 import java.util.List;
 
 public interface ShippingMethodService {
-    ResponseEntity<List<ShippingMethod>> getAllShippingMethod();
+    List<ShippingMethod> getAllShippingMethod();
 
-    ResponseEntity<ShippingMethod> getShippingMethodById(int id);
+    ShippingMethod getShippingMethodById(int id);
 
-    ResponseEntity<ShippingMethod> createShippingMethod(ShippingMethod shippingMethod);
+    ShippingMethod createShippingMethod(ShippingMethod shippingMethod);
 
-    ResponseEntity<ShippingMethod> updateShippingMethod(int id, String shippingMethod, BigDecimal price);
+    ShippingMethod updateShippingMethod(int id, String shippingMethod, BigDecimal price);
 
-    ResponseEntity<ShippingMethod> deleteShippingMethod(int id);
+    ShippingMethod deleteShippingMethod(int id);
 }

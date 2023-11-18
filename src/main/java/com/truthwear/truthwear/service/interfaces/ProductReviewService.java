@@ -10,19 +10,19 @@ public interface ProductReviewService {
 
     List<ProductReviews> getAllReviews();
 
-    ResponseEntity<ProductReviews> createReviews(ProductReviews productReviews);
+    ProductReviews createReviews(ProductReviews productReviews);
 
-    ResponseEntity<List<ProductReviews>> getProductReviewBasedOnUserId(int userId);
+    List<ProductReviews> getProductReviewBasedOnUserId(int userId);
 
-    ResponseEntity<List<ProductReviews>> getProductReviewBasedOnProductId(int productId);
+    List<ProductReviews> getProductReviewBasedOnProductId(int productId);
 
-    ResponseEntity<ProductReviews> updateReviews(int id,Integer ratingValue, String comments);
+    ProductReviews updateReviews(int id,Integer ratingValue, String comments);
 
-    ResponseEntity<ProductReviews> deleteReviewById(int id);
+    ProductReviews deleteReviewById(int id);
 
-    ResponseEntity<List<ProductReviews>> deleteReviewByUserId(int userId);
+    List<ProductReviews> deleteReviewByUserId(int userId);
 
-    ResponseEntity<List<ProductReviews>> deleteReviewByProductId(int productId);
+    List<ProductReviews> deleteReviewByProductId(int productId);
 
-    ResponseEntity<ProductReviews> getProductReviewById(int id);
+    ProductReviews getProductReviewById(int id);
 }

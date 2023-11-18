@@ -8,15 +8,15 @@ import java.sql.Timestamp;
 import java.util.List;
 
 public interface ShopOrderService {
-    ResponseEntity<List<ShopOrder>> getAllShopOrders();
+    List<ShopOrder> getAllShopOrders();
 
-    ResponseEntity<List<ShopOrder>> getAllShopOrdersByUserId(int userId);
+    List<ShopOrder> getAllShopOrdersByUserId(int userId);
 
-    ResponseEntity<ShopOrder> createShopOrder(ShopOrder shopOrder);
+    ShopOrder createShopOrder(ShopOrder shopOrder);
 
-    ResponseEntity<ShopOrder> updateShopOrder(int id, Timestamp orderDate, Integer shippingAddressId, Integer shippingMethodId, BigDecimal orderTotal, Integer orderStatus, Integer paymentMethodId);
+    ShopOrder updateShopOrder(int id, Timestamp orderDate, Integer shippingAddressId, Integer shippingMethodId, BigDecimal orderTotal, Integer orderStatus, Integer paymentMethodId);
 
-    ResponseEntity<ShopOrder> deleteShopOrder(int id);
+    ShopOrder deleteShopOrder(int id);
 
-    ResponseEntity<ShopOrder> getAllShopOrdersById(int id);
+    ShopOrder getAllShopOrdersById(int id);
 }

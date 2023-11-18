@@ -8,10 +8,10 @@ import com.truthwear.truthwear.repository.PromotionCategoryRepository;
 import com.truthwear.truthwear.repository.PromotionRepository;
 import com.truthwear.truthwear.service.interfaces.PromotionCategoryService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -21,45 +21,53 @@ public class PromotionCategoryServiceImpl implements PromotionCategoryService {
     private final ProductCategoryRepository productCategoryRepository;
     private final PromotionRepository promotionRepository;
 
+    // Get all promotion categories
     @Override
-    public ResponseEntity<List<PromotionCategory>> getAllPromotionCategory() {
-        return ResponseEntity.ok(promotionCategoryRepository.findAll());
+    public List<PromotionCategory> getAllPromotionCategory() {
+        return promotionCategoryRepository.findAll();
     }
 
+    // Get a specific promotion category by id
     @Override
-    public ResponseEntity<PromotionCategory> getPromotionCategoryById(int id) {
-        PromotionCategory promotionCategory = promotionCategoryRepository.findById(id).isPresent() ? promotionCategoryRepository.findById(id).get() : null;
-        if (promotionCategory == null) return ResponseEntity.notFound().build();
-        return ResponseEntity.ok(promotionCategory);
+    public PromotionCategory getPromotionCategoryById(int id) {
+        Optional<PromotionCategory> promotionCategoryOptional = promotionCategoryRepository.findById(id);
+        return promotionCategoryOptional.orElse(null);
     }
 
+    // Create a new promotion category
     @Override
-    public ResponseEntity<PromotionCategory> createPromotionCategory(PromotionCategory promotionCategory) {
-        return ResponseEntity.ok(promotionCategoryRepository.save(promotionCategory));
+    public PromotionCategory createPromotionCategory(PromotionCategory promotionCategory) {
+        return promotionCategoryRepository.save(promotionCategory);
     }
 
+    // Delete a promotion category by id
     @Override
-    public ResponseEntity<PromotionCategory> deletePromotionCategory(int id) {
-        PromotionCategory promotionCategory = promotionCategoryRepository.findById(id).isPresent() ? promotionCategoryRepository.findById(id).get() : null;
-        if (promotionCategory == null) return ResponseEntity.notFound().build();
+    public PromotionCategory deletePromotionCategory(int id) {
+        Optional<PromotionCategory> promotionCategoryOptional = promotionCategoryRepository.findById(id);
+        if (promotionCategoryOptional.isEmpty()) {
+            return null;
+        }
+        PromotionCategory promotionCategory = promotionCategoryOptional.get();
         promotionCategoryRepository.delete(promotionCategory);
-        return ResponseEntity.ok(promotionCategory);
-
+        return promotionCategory;
     }
 
+    // Update an existing promotion category
     @Override
-    public ResponseEntity<PromotionCategory> updatePromotionCategory(int id,Integer categoryId, Integer promotionId) {
-        PromotionCategory promotionCategory = promotionCategoryRepository.findById(id).isPresent() ? promotionCategoryRepository.findById(id).get() : null;
-        if (promotionCategory == null) return ResponseEntity.notFound().build();
+    public PromotionCategory updatePromotionCategory(int id, Integer categoryId, Integer promotionId) {
+        Optional<PromotionCategory> promotionCategoryOptional = promotionCategoryRepository.findById(id);
+        if (promotionCategoryOptional.isEmpty()) {
+            return null;
+        }
+        PromotionCategory promotionCategory = promotionCategoryOptional.get();
         if (categoryId != null) {
-            ProductCategory productCategory = productCategoryRepository.findById(categoryId).get();
-            promotionCategory.setProductCategory(productCategory);
+            Optional<ProductCategory> productCategoryOptional = productCategoryRepository.findById(categoryId);
+            productCategoryOptional.ifPresent(promotionCategory::setProductCategory);
         }
         if (promotionId != null) {
-            Promotion promotion = promotionRepository.findById(promotionId).get();
-            promotionCategory.setPromotion(promotion);
+            Optional<Promotion> promotionOptional = promotionRepository.findById(promotionId);
+            promotionOptional.ifPresent(promotionCategory::setPromotion);
         }
-        return ResponseEntity.ok(promotionCategoryRepository.save(promotionCategory));
+        return promotionCategoryRepository.save(promotionCategory);
     }
-
 }

@@ -1,62 +1,74 @@
 package com.truthwear.truthwear.service;
 
 import com.truthwear.truthwear.entity.OrderLine;
-import com.truthwear.truthwear.entity.Product;
-import com.truthwear.truthwear.entity.ShopOrder;
 import com.truthwear.truthwear.repository.OrderLineRepository;
 import com.truthwear.truthwear.repository.ProductRepository;
 import com.truthwear.truthwear.repository.ShopOrderRepository;
 import com.truthwear.truthwear.service.interfaces.OrderLineService;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 public class OrderLineServiceImpl implements OrderLineService {
 
-    private  final OrderLineRepository orderLineRepository;
+    private final OrderLineRepository orderLineRepository;
     private final ProductRepository productRepository;
     private final ShopOrderRepository shopOrderRepository;
 
+    // Get all order lines
     @Override
-    public ResponseEntity<List<OrderLine>> getAllOrderLines() {
-        return ResponseEntity.ok(orderLineRepository.findAll());
+    public List<OrderLine> getAllOrderLines() {
+        return orderLineRepository.findAll();
     }
 
+    // Get a specific order line by id
     @Override
-    public ResponseEntity<OrderLine> getAllOrderLinesById(int id) {
-        return ResponseEntity.ok(orderLineRepository.findById(id).get());
+    public OrderLine getOrderLineById(int id) {
+        return orderLineRepository.findById(id).orElse(null);
     }
 
+    // Create a new order line
     @Override
-    public ResponseEntity<OrderLine> createOrderLines(OrderLine orderLine) {
-        return ResponseEntity.ok(orderLineRepository.save(orderLine));
+    public OrderLine createOrderLine(OrderLine orderLine) {
+        return orderLineRepository.save(orderLine);
     }
 
+    // Update an existing order line
     @Override
-    public ResponseEntity<OrderLine> updateOrderLines(int id, Integer productId, Integer orderId, Integer quantity, Integer price) {
-        OrderLine orderLine = orderLineRepository.findById(id).get();
+    public OrderLine updateOrderLine(int id, Integer productId, Integer orderId, Integer quantity, Integer price) {
+        Optional<OrderLine> orderLineOptional = orderLineRepository.findById(id);
+        if (orderLineOptional.isEmpty()) {
+            return null;
+        }
+        OrderLine orderLine = orderLineOptional.get();
         if (productId != null) {
-            Product product = productRepository.findById(productId).get();
-            orderLine.setProduct(product);
+            productRepository.findById(productId).ifPresent(orderLine::setProduct);
         }
         if (orderId != null) {
-            ShopOrder shopOrder = shopOrderRepository.findById(orderId).get();
-            orderLine.setShopOrder(shopOrder);
+            shopOrderRepository.findById(orderId).ifPresent(orderLine::setShopOrder);
         }
-        if (quantity != null)orderLine.setQuantity(quantity);
-        if (price != null)orderLine.setPrice(price);
-        return ResponseEntity.ok(orderLineRepository.save(orderLine));
+        if (quantity != null) {
+            orderLine.setQuantity(quantity);
+        }
+        if (price != null) {
+            orderLine.setPrice(price);
+        }
+        return orderLineRepository.save(orderLine);
     }
 
+    // Delete an order line
     @Override
-    public ResponseEntity<OrderLine> deleteOrderLines(int id) {
-        OrderLine orderLine = orderLineRepository.findById(id).get();
+    public OrderLine deleteOrderLine(int id) {
+        Optional<OrderLine> orderLineOptional = orderLineRepository.findById(id);
+        if (orderLineOptional.isEmpty()) {
+            return null;
+        }
+        OrderLine orderLine = orderLineOptional.get();
         orderLineRepository.delete(orderLine);
-        return ResponseEntity.ok(orderLine);
+        return orderLine;
     }
-
 }
