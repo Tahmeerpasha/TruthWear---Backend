@@ -2,6 +2,7 @@ package com.truthwear.truthwear.config;
 
 import com.truthwear.truthwear.repository.SiteUserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -16,6 +17,13 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @RequiredArgsConstructor
 public class ApplicationConfig {
     public final SiteUserRepository userRepository;
+    @Value("${jwt.secret-key}")
+    private String SECRET_KEY;
+
+    @Bean
+    public String jwtSecretKey(){
+        return SECRET_KEY;
+    }
     @Bean
     public UserDetailsService userDetailsService() {
         return username -> userRepository.findByEmailId(username)
