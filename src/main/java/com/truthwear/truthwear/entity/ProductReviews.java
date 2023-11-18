@@ -2,9 +2,11 @@ package com.truthwear.truthwear.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Data
+@NoArgsConstructor
 @Table(name = "product_review")
 public class ProductReviews {
 
@@ -13,24 +15,23 @@ public class ProductReviews {
     @Column(name = "id")
     private int id;
 
-    @Column(name = "user_id")
-    private int userId;
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private SiteUser user;
 
-    @Column(name = "ordered_product_id")
-    private int orderedProductId;
+    @ManyToOne
+    @JoinColumn(name = "ordered_product_id", nullable = false)
+    private OrderLine orderedProduct;
 
     @Column(name = "rating_value")
-    private int rating;
+    private Integer rating;
 
     @Column(name = "user_comment")
     private String review;
 
-    public ProductReviews() {
-    }
-
-    public ProductReviews(int userId, int productId, int rating, String review) {
-        this.userId = userId;
-        this.orderedProductId = productId;
+    public ProductReviews(SiteUser user, OrderLine orderedProduct, int rating, String review) {
+        this.user = user;
+        this.orderedProduct = orderedProduct;
         this.rating = rating;
         this.review = review;
     }

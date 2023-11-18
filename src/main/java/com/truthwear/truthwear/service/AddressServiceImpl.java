@@ -7,6 +7,7 @@ import com.truthwear.truthwear.repository.AddressRepository;
 import com.truthwear.truthwear.repository.UserAddressRepository;
 import com.truthwear.truthwear.repository.SiteUserRepository;
 import com.truthwear.truthwear.service.interfaces.AddressService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,26 +16,21 @@ import java.util.List;
 import java.util.NoSuchElementException;
 
 @Service
+@RequiredArgsConstructor
 public class AddressServiceImpl implements AddressService {
 
     private AddressRepository addressRepository;
     private SiteUserRepository siteUserRepository;
 
     private UserAddressRepository userAddressRepository;
-    @Autowired
-    public AddressServiceImpl(AddressRepository addressRepository, SiteUserRepository siteUserRepository, UserAddressRepository userAddressRepository) {
-        this.addressRepository = addressRepository;
-        this.siteUserRepository = siteUserRepository;
-        this.userAddressRepository = userAddressRepository;
-    }
     @Override
     public List<Address> getAllAddress(int id) {
         List<UserAddress> userAddress;
         List<Address> addresses = new ArrayList<>();
         try {
             userAddress = userAddressRepository.findByUserId(id);
-            userAddress.stream().map(userAddress1 -> addressRepository.findById(userAddress1.getAddressId()).get())
-                    .forEach(address -> addresses.add(address));
+            userAddress.stream().map(userAddress1 -> addressRepository.findById(userAddress1.getId()).get())
+                    .forEach(addresses::add);
         }catch (NoSuchElementException e){
             System.out.println(e);
             return null;
@@ -52,7 +48,7 @@ public class AddressServiceImpl implements AddressService {
             return null;
         }
         Address newAddress = addressRepository.save(address);
-        UserAddress userAddress = new UserAddress(siteUser.getId(), newAddress.getId(),0);
+        UserAddress userAddress = new UserAddress(siteUser, newAddress,0);
         userAddressRepository.save(userAddress);
         return newAddress;
     }

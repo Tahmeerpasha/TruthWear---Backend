@@ -2,9 +2,11 @@ package com.truthwear.truthwear.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Data
+@NoArgsConstructor
 @Table(name = "order_payment_method")
 public class OrderPaymentMethod {
     @Id
@@ -12,16 +14,17 @@ public class OrderPaymentMethod {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(name = "order_id")
-    private int orderId;
-    @Column(name = "user_payment_method_id")
-    private int userPaymentMethodId;
+    @ManyToOne
+    @JoinColumn(name = "order_id", nullable = false)
+    private ShopOrder shopOrder;
 
-    public OrderPaymentMethod() {
-    }
+    @ManyToOne
+    @JoinColumn(name = "user_payment_method_id", nullable = false)
+    private UserPaymentMethod userPaymentMethod;
 
-    public OrderPaymentMethod(int orderId, int userPaymentMethodId) {
-        this.orderId = orderId;
-        this.userPaymentMethodId = userPaymentMethodId;
+
+    public OrderPaymentMethod(ShopOrder shopOrder, UserPaymentMethod userPaymentMethod) {
+        this.shopOrder = shopOrder;
+        this.userPaymentMethod = userPaymentMethod;
     }
 }

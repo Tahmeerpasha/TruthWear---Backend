@@ -2,9 +2,11 @@ package com.truthwear.truthwear.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Data
+@NoArgsConstructor
 @Table(name = "product")
 public class Product {
 
@@ -13,8 +15,9 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(name = "category_id")
-    private int categoryId;
+    @ManyToOne
+    @JoinColumn(name = "category_id", nullable = false)
+    private ProductCategory category;
 
     @Column(name = "product_name")
     private String productName;
@@ -31,11 +34,8 @@ public class Product {
     @Column(name = "price")
     private double price;
 
-    public Product() {
-    }
-
-    public Product(int categoryId, String productName, String description, String image, long stock, double price) {
-        this.categoryId = categoryId;
+    public Product(ProductCategory category, String productName, String description, String image, long stock, double price) {
+        this.category = category;
         this.productName = productName;
         this.description = description;
         this.image = image;

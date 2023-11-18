@@ -15,7 +15,6 @@ import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 import java.util.List;
 import java.util.Optional;
 
@@ -51,23 +50,24 @@ public class ProductServiceImpl implements ProductService{
         try{
             String fileName = image.getOriginalFilename();
             String filePath = uploadDirectory+File.separator+fileName;
-            // If directory is not present then create it
-//            File file = new File(uploadDirectory);
-//            if(!file.exists()){
-//                file.mkdir();
-//            }
 
+            // If directory is not present then create it
+//            File file1 = new File(uploadDirectory);
+//            if(!file1.exists()){
+//                file1.mkdir();
+//            }
 //            print the path where image is stored
 //            System.out.println(file.getAbsolutePath());
+
 
 //            Copy file to the image directory
             Files.copy(image.getInputStream(), Paths.get(filePath));
             ProductCategory productCategory = productCategoryRepository.findByCategoryName(categoryName);
-            Product product = new Product( productCategory.getId(), productName, productDescription, filePath.toString(), stock, price);
+            Product product = new Product( productCategory, productName, productDescription, filePath, stock, price);
             productRepository.save(product);
             return ResponseEntity.ok(product);
         }catch (Exception e){
-            e.printStackTrace();
+            System.out.println(e.getMessage());
             return ResponseEntity.internalServerError().body(null);
         }
     }
@@ -86,7 +86,7 @@ public class ProductServiceImpl implements ProductService{
                 return ResponseEntity.notFound().build();
             }
         }catch (Exception e){
-            e.printStackTrace();
+            System.out.println(e.getMessage());
             return ResponseEntity.internalServerError().body(null);
         }
     }
@@ -106,17 +106,17 @@ public class ProductServiceImpl implements ProductService{
     public List<Product> searchProduct(String name, String category, double minPrice, double maxPrice) {
         System.out.println("|"+name.isEmpty() + "name " + category + " " + minPrice + " " + maxPrice);
         if (!name.isEmpty() && !category.isEmpty() && minPrice != 0 && maxPrice != 0){
-            return productRepository.findByProductNameContainingAndCategoryIdAndPriceBetween(name, productCategoryRepository.findByCategoryName(category).getId(), minPrice, maxPrice);
+            return productRepository.findByProductNameContainingAndCategoryAndPriceBetween(name, productCategoryRepository.findByCategoryName(category), minPrice, maxPrice);
         }else if (!name.isEmpty() && !category.isEmpty()){
-            return productRepository.findByProductNameContainingAndCategoryId(name, productCategoryRepository.findByCategoryName(category).getId());
+            return productRepository.findByProductNameContainingAndCategory(name, productCategoryRepository.findByCategoryName(category));
         }else if (!name.isEmpty() && minPrice != 0 && maxPrice != 0){
             return productRepository.findByProductNameContainingAndPriceBetween(name, minPrice, maxPrice);
         }else if (!category.isEmpty() && minPrice != 0 && maxPrice != 0){
-            return productRepository.findByCategoryIdAndPriceBetween(productCategoryRepository.findByCategoryName(category).getId(), minPrice, maxPrice);
+            return productRepository.findByCategoryAndPriceBetween(productCategoryRepository.findByCategoryName(category), minPrice, maxPrice);
         }else if (!name.isEmpty()){
             return productRepository.findByProductNameContaining(name);
         }else if (!category.isEmpty()){
-            return productRepository.findByCategoryId(productCategoryRepository.findByCategoryName(category).getId());
+            return productRepository.findByCategory(productCategoryRepository.findByCategoryName(category));
         }else if (minPrice == 0 && maxPrice != 0){
             return productRepository.findByPriceBetween(minPrice, maxPrice);
         }else{
@@ -130,7 +130,7 @@ public class ProductServiceImpl implements ProductService{
             Files.delete(path);
             return true;
         }catch (Exception e){
-            e.printStackTrace();
+            System.out.println(e.getMessage());
             return false;
         }
     }

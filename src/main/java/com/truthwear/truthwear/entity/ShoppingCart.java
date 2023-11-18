@@ -2,9 +2,11 @@ package com.truthwear.truthwear.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Data
+@NoArgsConstructor
 @Table(name = "shopping_cart")
 public class ShoppingCart {
     @Id
@@ -12,13 +14,11 @@ public class ShoppingCart {
     @Column(name = "id")
     private int id;
 
-    @Column(name = "user_id")
-    private int userId;
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private SiteUser user;
 
-    public ShoppingCart() {
-    }
-
-    public ShoppingCart(int userId) {
-        this.userId = userId;
+    public ShoppingCart(SiteUser user) {
+        this.user = user;
     }
 }

@@ -1,20 +1,24 @@
 package com.truthwear.truthwear.service;
 
 import com.truthwear.truthwear.entity.OrderPaymentMethod;
+import com.truthwear.truthwear.entity.ShopOrder;
+import com.truthwear.truthwear.entity.UserPaymentMethod;
 import com.truthwear.truthwear.repository.OrderPaymentMethodRepository;
+import com.truthwear.truthwear.repository.ShopOrderRepository;
+import com.truthwear.truthwear.repository.UserPaymentMethodRepository;
 import com.truthwear.truthwear.service.interfaces.OrderPaymentMethodService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class OrderPaymentMethodServiceImpl implements OrderPaymentMethodService {
     private final OrderPaymentMethodRepository orderPaymentMethodRepository;
-
-    public OrderPaymentMethodServiceImpl(OrderPaymentMethodRepository orderPaymentMethodRepository) {
-        this.orderPaymentMethodRepository = orderPaymentMethodRepository;
-    }
+    private final ShopOrderRepository shopOrderRepository;
+    private final UserPaymentMethodRepository userPaymentMethodRepository;
 
     @Override
     public ResponseEntity<List<OrderPaymentMethod>> getAllOrderPaymentMethods() {
@@ -34,8 +38,14 @@ public class OrderPaymentMethodServiceImpl implements OrderPaymentMethodService 
     @Override
     public ResponseEntity<OrderPaymentMethod> updateOrderPaymentMethod(int id, Integer orderId, Integer userPaymentMethodId) {
         OrderPaymentMethod orderPaymentMethod = orderPaymentMethodRepository.findById(id).get();
-        if (orderId != null)orderPaymentMethod.setOrderId(orderId);
-        if (userPaymentMethodId != null)orderPaymentMethod.setUserPaymentMethodId(userPaymentMethodId);
+        if (orderId != null) {
+            ShopOrder shopOrder = shopOrderRepository.findById(orderId).get();
+            orderPaymentMethod.setShopOrder(shopOrder);
+        }
+        if (userPaymentMethodId != null) {
+            UserPaymentMethod userPaymentMethod = userPaymentMethodRepository.findById(userPaymentMethodId).get();
+            orderPaymentMethod.setUserPaymentMethod(userPaymentMethod);
+        }
         return ResponseEntity.ok(orderPaymentMethodRepository.save(orderPaymentMethod));
     }
 

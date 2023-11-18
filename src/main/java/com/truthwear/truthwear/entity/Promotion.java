@@ -2,11 +2,13 @@ package com.truthwear.truthwear.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.sql.Timestamp;
 
 @Entity
 @Data
+@NoArgsConstructor
 @Table(name = "promotion")
 public class Promotion {
     @Id
@@ -21,16 +23,13 @@ public class Promotion {
     private String promotionDescription;
 
     @Column(name = "discount_rate")
-    private int discountRate;
+    private Integer discountRate;
 
     @Column(name = "start_date")
     private Timestamp startDate;
 
     @Column(name = "end_date")
     private Timestamp endDate;
-
-    public Promotion() {
-    }
 
     public Promotion(String promotionName, String promotionDescription, int discountRate, Timestamp startDate, Timestamp endDate) {
         this.promotionName = promotionName;

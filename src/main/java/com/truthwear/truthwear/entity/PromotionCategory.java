@@ -2,26 +2,28 @@ package com.truthwear.truthwear.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Data
+@NoArgsConstructor
 @Table(name = "promotion_category")
 public class PromotionCategory {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private int id;
-    @Column(name = "category_id")
-    private int categoryId;
 
-    @Column(name = "promotion_id")
-    private int promotionId;
+    @ManyToOne
+    @JoinColumn(name = "category_id", nullable = false)
+    private ProductCategory productCategory;
 
-    public PromotionCategory() {
-    }
+    @ManyToOne
+    @JoinColumn(name = "promotion_id", nullable = false)
+    private Promotion promotion;
 
-    public PromotionCategory(int categoryId, int promotionId) {
-        this.categoryId = categoryId;
-        this.promotionId = promotionId;
+    public PromotionCategory(ProductCategory productCategory, Promotion promotion) {
+        this.productCategory = productCategory;
+        this.promotion = promotion;
     }
 }

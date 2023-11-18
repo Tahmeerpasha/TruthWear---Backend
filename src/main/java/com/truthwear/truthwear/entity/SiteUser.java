@@ -42,8 +42,6 @@ public class SiteUser implements UserDetails {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    public SiteUser(SiteUser user) {
-    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

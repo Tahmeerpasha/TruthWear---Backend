@@ -13,21 +13,24 @@ public class UserAddress {
     @Column(name = "id")
     private int id;
 
-    @Column(name = "user_id")
-    private int userId;
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private SiteUser user;
 
-    @Column(name = "address_id")
-    private int addressId;
+
+    @ManyToOne
+    @JoinColumn(name = "address_id", nullable = false)
+    private Address address;
 
     @Column(name = "is_default")
-    private int isDefault;
+    private Integer isDefault;
 
     public UserAddress() {
     }
 
-    public UserAddress(int userId, int addressId, int isDefault) {
-        this.userId = userId;
-        this.addressId = addressId;
+    public UserAddress(SiteUser user, Address address, int isDefault) {
+        this.user = user;
+        this.address = address;
         this.isDefault = isDefault;
     }
 }

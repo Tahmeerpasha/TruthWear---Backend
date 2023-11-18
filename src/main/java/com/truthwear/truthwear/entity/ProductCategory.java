@@ -2,9 +2,11 @@ package com.truthwear.truthwear.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Data
+@NoArgsConstructor
 @Table(name = "product_category")
 public class ProductCategory {
     @Id
@@ -14,9 +16,6 @@ public class ProductCategory {
 
     @Column(name="category_name")
     private String categoryName;
-
-    public ProductCategory() {
-    }
 
     public ProductCategory(String categoryName) {
         this.categoryName = categoryName;

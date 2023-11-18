@@ -2,11 +2,13 @@ package com.truthwear.truthwear.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 
 @Entity
 @Data
+@NoArgsConstructor
 @Table(name = "shipping_method")
 public class ShippingMethod {
     @Id
@@ -19,9 +21,6 @@ public class ShippingMethod {
 
     @Column(name = "price")
     private BigDecimal price;
-
-    public ShippingMethod() {
-    }
 
     public ShippingMethod(String shippingMethod, BigDecimal price) {
         this.shippingMethod = shippingMethod;
