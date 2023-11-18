@@ -20,14 +20,25 @@ import java.util.function.Function;
 @RequiredArgsConstructor
 public class JwtService {
     private final String SECRET_KEY;
+    private final long ACCESS_TOKEN_EXPIRATION = 1000 * 60 * 60 * 10; // 10 hours
+    private final long REFRESH_TOKEN_EXPIRATION = 1000 * 60 * 60 * 24 * 7; // 7 days
+
     public String extractUserName(String token) {
         return extractClaims(token, Claims::getSubject);
     }
-    public String generateToken(UserDetails userDetails){
-        return generateTokens(new HashMap<>(),userDetails);
+
+    public Map<String, String> generateToken(UserDetails userDetails) {
+        Map<String, Object> claims = new HashMap<>();
+        String accessToken = generateToken(claims, userDetails, ACCESS_TOKEN_EXPIRATION);
+        String refreshToken = generateToken(claims, userDetails, REFRESH_TOKEN_EXPIRATION);
+
+        Map<String, String> tokens = new HashMap<>();
+        tokens.put("access_token", accessToken);
+        tokens.put("refresh_token", refreshToken);
+        return tokens;
     }
 
-    public boolean isTokenValid(String token, UserDetails userDetails){
+    public boolean isTokenValid(String token, UserDetails userDetails) {
         final String username = extractUserName(token);
         return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
     }
@@ -40,28 +51,23 @@ public class JwtService {
         return extractClaims(token, Claims::getExpiration);
     }
 
-    public String generateTokens(
-            Map<String, Object> extraClaims,
-            UserDetails userDetails
-    ){
-        System.out.println("Generating tokens");
-        return Jwts
-                .builder()
+    private String generateToken(Map<String, Object> extraClaims, UserDetails userDetails, long expiration) {
+        return Jwts.builder()
                 .setClaims(extraClaims)
                 .setSubject(userDetails.getUsername())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 1000*60*60*10))
+                .setExpiration(new Date(System.currentTimeMillis() + expiration))
                 .signWith(getSigningKey(), SignatureAlgorithm.HS256)
                 .compact();
     }
 
-    public <T> T extractClaims(String token, Function<Claims,T> claimsResolver) {
+    public <T> T extractClaims(String token, Function<Claims, T> claimsResolver) {
         final Claims claims = extractAllClaims(token);
         return claimsResolver.apply(claims);
     }
+
     private Claims extractAllClaims(String token) {
-        return Jwts
-                .parserBuilder()
+        return Jwts.parserBuilder()
                 .setSigningKey(getSigningKey())
                 .build()
                 .parseClaimsJws(token)

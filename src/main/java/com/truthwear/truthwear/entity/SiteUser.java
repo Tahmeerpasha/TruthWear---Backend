@@ -41,6 +41,10 @@ public class SiteUser implements UserDetails {
     private String password;
     @Enumerated(EnumType.STRING)
     private Role role;
+
+    public SiteUser(SiteUser user) {
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority(role.name()));
