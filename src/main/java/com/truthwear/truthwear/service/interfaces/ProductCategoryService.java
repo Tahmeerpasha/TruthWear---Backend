@@ -11,7 +11,7 @@ public interface ProductCategoryService {
 
     ProductCategory getProductCategoryByName(String name);
 
-    ProductCategory deleteProductCategory(String name);
+    ProductCategory deleteProductCategory(int id);
 
     ProductCategory updateProductCategory(ProductCategory productCategory, int id);
 }

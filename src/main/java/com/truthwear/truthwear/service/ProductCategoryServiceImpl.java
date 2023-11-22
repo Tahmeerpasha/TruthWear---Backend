@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Service
@@ -24,6 +25,12 @@ public class ProductCategoryServiceImpl implements ProductCategoryService {
     // Create a new product category
     @Override
     public ProductCategory createProductCategory(ProductCategory productCategory) {
+        if(productCategory.getCategoryName() == null || productCategory.getCategoryName().isEmpty()){
+            throw new RuntimeException("Product category name cannot be empty");
+        }
+        if(productCategoryRepository.findByCategoryName(productCategory.getCategoryName()) != null){
+            throw new RuntimeException("Product category already exists");
+        }
         return productCategoryRepository.save(productCategory);
     }
 
@@ -35,8 +42,8 @@ public class ProductCategoryServiceImpl implements ProductCategoryService {
 
     // Delete a product category by name
     @Override
-    public ProductCategory deleteProductCategory(String name) {
-        ProductCategory productCategory = productCategoryRepository.findByCategoryName(name);
+    public ProductCategory deleteProductCategory(int id) {
+        ProductCategory productCategory = productCategoryRepository.findById(id).get();
         if (productCategory != null) {
             productCategoryRepository.delete(productCategory);
         }

@@ -20,6 +20,7 @@ public class ApplicationConfig {
     @Value("${jwt.secret-key}")
     private String SECRET_KEY;
 
+
     @Bean
     public String jwtSecretKey(){
         return SECRET_KEY;

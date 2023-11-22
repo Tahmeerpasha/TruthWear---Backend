@@ -67,10 +67,10 @@ public class ProductCategoryController {
     }
 
     // Delete a product category by name
-    @DeleteMapping("/{name}")
-    public ResponseEntity<ProductCategory> deleteProductCategory(@PathVariable String name){
+    @DeleteMapping("/{id}")
+    public ResponseEntity<ProductCategory> deleteProductCategory(@PathVariable int id){
         try {
-            ProductCategory deletedProductCategory = productCategoryService.deleteProductCategory(name);
+            ProductCategory deletedProductCategory = productCategoryService.deleteProductCategory(id);
             return ResponseEntity.ok(deletedProductCategory);
         } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
