@@ -1,6 +1,7 @@
 package com.truthwear.truthwear.controller;
 
 import com.truthwear.truthwear.entity.Product;
+import com.truthwear.truthwear.entity.ProductCategory;
 import com.truthwear.truthwear.service.ProductServiceImpl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -69,10 +70,19 @@ public class ProductController {
 
     // Update an existing product
     @PutMapping("/{id}")
-    public ResponseEntity<Product> updateProduct(@PathVariable int id, @RequestBody Product product) {
+    public ResponseEntity<Product> updateProduct(@PathVariable int id,
+                                                 @RequestParam(required = false) ProductCategory productCategory,
+                                                 @RequestParam(required = false) String productName,
+                                                 @RequestParam(required = false) String productDescription,
+                                                 @RequestParam(required = false) MultipartFile image,
+                                                 @RequestParam(required = false) Long stock,
+                                                 @RequestParam(required = false) Double price
+                                                 ) {
+//            System.out.println("id: " + id+ " category: " + productCategory + " name: " + productName + " desc: " + productDescription + " image: " + image + " stock: " + stock + " price: " + price);
         try {
-            return productService.updateProduct(id, product);
+            return productService.updateProduct(id, productCategory, productName, productDescription, image, stock, price);
         } catch (Exception e) {
+            e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }

@@ -1,6 +1,7 @@
 package com.truthwear.truthwear.service.interfaces;
 
 import com.truthwear.truthwear.entity.Product;
+import com.truthwear.truthwear.entity.ProductCategory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -16,7 +17,8 @@ public interface ProductService {
 
     ResponseEntity<Product> deleteProduct(int id);
 
-    ResponseEntity<Product> updateProduct(int id, Product product);
 
     List<Product> searchProduct(String name, String category, double minPrice, double maxPrice);
+
+    ResponseEntity<Product> updateProduct(int id, ProductCategory productCategory, String productName, String productDescription, MultipartFile image, Long stock, Double price);
 }
