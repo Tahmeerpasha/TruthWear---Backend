@@ -21,4 +21,6 @@ public interface ProductService {
     List<Product> searchProduct(String name, String category, double minPrice, double maxPrice);
 
     ResponseEntity<Product> updateProduct(int id, ProductCategory productCategory, String productName, String productDescription, MultipartFile image, Long stock, Double price);
+
+    List<Product> getProductByCategory(String category);
 }

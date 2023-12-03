@@ -24,7 +24,15 @@ public class AuthenticationService {
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
+
     public AuthenticationResponse register(RegisterRequest registerRequest) {
+        if (registerRequest.getEmail() == null ||
+                registerRequest.getFirstName() == null ||
+                registerRequest.getLastName() == null ||
+                registerRequest.getPassword() == null ||
+                registerRequest.getPhoneNumber() == null)
+            return AuthenticationResponse.builder().build();
+
         var user = SiteUser.builder()
                 .firstName(registerRequest.getFirstName())
                 .lastName(registerRequest.getLastName())
@@ -33,12 +41,13 @@ public class AuthenticationService {
                 .phoneNumber(registerRequest.getPhoneNumber())
                 .role(Role.USER)
                 .build();
-        userRepository.save(user);
+        SiteUser user1 = userRepository.save(user);
 
-        Map<String,String> jwtToken = jwtService.generateToken(user);
+        Map<String, String> jwtToken = jwtService.generateToken(user);
         return AuthenticationResponse.builder()
                 .token(jwtToken.get("access_token"))
                 .refreshToken(jwtToken.get("refresh_token"))
+                .siteUser(user1)
                 .build();
     }
 
@@ -50,10 +59,11 @@ public class AuthenticationService {
                 )
         );
         var user = userRepository.findByEmailId(registerRequest.getEmail()).orElseThrow();
-        Map<String,String> jwtToken = jwtService.generateToken(user);
+        Map<String, String> jwtToken = jwtService.generateToken(user);
         return AuthenticationResponse.builder()
                 .token(jwtToken.get("access_token"))
                 .refreshToken(jwtToken.get("refresh_token"))
+                .siteUser(user)
                 .build();
     }
 
@@ -67,13 +77,15 @@ public class AuthenticationService {
 
             Map<String, String> response = new HashMap<>();
             response.put("access_token", newAccessToken);
-
+            response.put("User-email", userDetails.getUsername());
+            response.put("User-password", userDetails.getPassword());
             return ResponseEntity.ok(response);
         } else {
             // Handle invalid refresh token
             return ResponseEntity.badRequest().build();
         }
     }
+
     // Example method to validate the refresh token (you might want to check against a database or some storage)
     private boolean isValidRefreshToken(String refreshToken) {
         return refreshToken != null && jwtService.isTokenValid(refreshToken, loadUserDetailsFromToken(refreshToken));

@@ -125,6 +125,11 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    public List<Product> getProductByCategory(String category) {
+        return productRepository.findByCategory(productCategoryRepository.findByCategoryName(category));
+    }
+
+    @Override
     public List<Product> searchProduct(String name, String category, double minPrice, double maxPrice) {
         System.out.println("|" + name.isEmpty() + "name " + category + " " + minPrice + " " + maxPrice);
         if (!name.isEmpty() && !category.isEmpty() && minPrice != 0 && maxPrice != 0) {

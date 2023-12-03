@@ -3,11 +3,18 @@ package com.truthwear.truthwear.controller;
 import com.truthwear.truthwear.entity.Product;
 import com.truthwear.truthwear.entity.ProductCategory;
 import com.truthwear.truthwear.service.ProductServiceImpl;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Optional;
 
@@ -42,6 +49,28 @@ public class ProductController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
+
+    @GetMapping("image/{id}")
+    public ResponseEntity<Resource> serveImage(@PathVariable String id) throws IOException {
+        String imagesFolderPath = "E:/Development/TruthWear/Backend/TruthWear";
+        String imageName = productService.getProductById(Integer.parseInt(id)).get().getImage();
+        Path imagePath = Paths.get(imagesFolderPath).resolve(imageName);
+        Resource imageResource = new UrlResource(imagePath.toUri());
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_TYPE, MediaType.IMAGE_JPEG_VALUE)
+                .body(imageResource);
+    }
+
+    @GetMapping("/category/{category}")
+    public ResponseEntity<List<Product>> getProductByCategory(@PathVariable String category) {
+        try {
+            List<Product> products = productService.getProductByCategory(category);
+            return ResponseEntity.ok(products);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
 
     // Create a new product
     @PostMapping("/upload")
