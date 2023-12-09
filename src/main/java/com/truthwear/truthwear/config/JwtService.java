@@ -20,16 +20,17 @@ import java.util.function.Function;
 @RequiredArgsConstructor
 public class JwtService {
     private final String SECRET_KEY;
-    private final long ACCESS_TOKEN_EXPIRATION = 1000 * 60 * 60 * 10; // 10 hours
-    private final long REFRESH_TOKEN_EXPIRATION = 1000 * 60 * 60 * 24 * 7; // 7 days
-
     public String extractUserName(String token) {
         return extractClaims(token, Claims::getSubject);
     }
 
     public Map<String, String> generateToken(UserDetails userDetails) {
         Map<String, Object> claims = new HashMap<>();
+        // 10 hours
+        long ACCESS_TOKEN_EXPIRATION = 1000 * 60 * 60 * 10;
         String accessToken = generateToken(claims, userDetails, ACCESS_TOKEN_EXPIRATION);
+        // 7 days
+        long REFRESH_TOKEN_EXPIRATION = 1000 * 60 * 60 * 24 * 7;
         String refreshToken = generateToken(claims, userDetails, REFRESH_TOKEN_EXPIRATION);
 
         Map<String, String> tokens = new HashMap<>();
