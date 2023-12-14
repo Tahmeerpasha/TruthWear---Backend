@@ -80,6 +80,7 @@ public class ProductController {
                                                  @RequestParam("image") MultipartFile image,
                                                  @RequestParam("stock") long stock,
                                                  @RequestParam("price") double price) {
+        System.out.println(categoryName);
         try {
             return productService.createProduct(categoryName, productName, productDescription, image, stock, price);
         } catch (Exception e) {

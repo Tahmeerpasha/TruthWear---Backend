@@ -1,8 +1,10 @@
 package com.truthwear.truthwear.service;
 
+import com.truthwear.truthwear.entity.Product;
 import com.truthwear.truthwear.entity.ProductCategory;
 import com.truthwear.truthwear.repository.ProductCategoryRepository;
 import com.truthwear.truthwear.service.interfaces.ProductCategoryService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -15,7 +17,7 @@ import java.util.Optional;
 public class ProductCategoryServiceImpl implements ProductCategoryService {
 
     private final ProductCategoryRepository productCategoryRepository;
-
+    private final ProductServiceImpl productService;
     // Get all product categories
     @Override
     public List<ProductCategory> getAllProductCategories() {
@@ -44,6 +46,13 @@ public class ProductCategoryServiceImpl implements ProductCategoryService {
     @Override
     public ProductCategory deleteProductCategory(int id) {
         ProductCategory productCategory = productCategoryRepository.findById(id).get();
+       List<Product> products =  productService.getProductByCategory(productCategory.getCategoryName());
+       if(!products.isEmpty()) {
+           products.forEach(product -> {
+               productService.deleteProduct(product.getId());
+           });
+       }
+
         if (productCategory != null) {
             productCategoryRepository.delete(productCategory);
         }

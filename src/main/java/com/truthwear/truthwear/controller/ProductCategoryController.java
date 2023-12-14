@@ -2,6 +2,7 @@ package com.truthwear.truthwear.controller;
 
 import com.truthwear.truthwear.entity.ProductCategory;
 import com.truthwear.truthwear.service.ProductCategoryServiceImpl;
+import org.apache.logging.log4j.Logger;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
