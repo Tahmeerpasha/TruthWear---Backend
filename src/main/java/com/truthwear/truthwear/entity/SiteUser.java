@@ -31,7 +31,7 @@ public class SiteUser implements UserDetails {
     @Column(name = "last_name")
     private String lastName;
 
-    @Column(name = "email_id")
+    @Column(name = "email_id", unique = true)
     private String emailId;
 
     @Column(name = "phone_number")
@@ -39,9 +39,12 @@ public class SiteUser implements UserDetails {
 
     @Column(name = "user_password")
     private String password;
+
     @Enumerated(EnumType.STRING)
     private Role role;
 
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    private ShoppingCart shoppingCart;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -77,5 +80,19 @@ public class SiteUser implements UserDetails {
         this.emailId = emailId;
         this.phoneNumber = phoneNumber;
         this.password = password;
+    }
+
+    @Override
+    public String toString() {
+        return "SiteUser{" +
+                "id=" + id +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", emailId='" + emailId + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                ", password='" + password + '\'' +
+                ", role=" + role +
+                // Exclude shoppingCart from toString
+                '}';
     }
 }

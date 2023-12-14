@@ -1,7 +1,13 @@
 package com.truthwear.truthwear.controller;
 
+import com.truthwear.truthwear.entity.ShoppingCart;
 import com.truthwear.truthwear.entity.SiteUser;
+import com.truthwear.truthwear.service.ShoppingCartServiceImpl;
 import com.truthwear.truthwear.service.UserServiceImpl;
+import jakarta.transaction.Transactional;
+import lombok.AllArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -9,14 +15,11 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@AllArgsConstructor
 @RequestMapping("/api/v1/users")
 public class UserController {
 
     private final UserServiceImpl userService;
-
-    public UserController(UserServiceImpl userService) {
-        this.userService = userService;
-    }
 
     // Create a new user
     @PostMapping

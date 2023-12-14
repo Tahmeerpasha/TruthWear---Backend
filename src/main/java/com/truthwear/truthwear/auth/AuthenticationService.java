@@ -2,9 +2,13 @@ package com.truthwear.truthwear.auth;
 
 import com.truthwear.truthwear.config.JwtService;
 import com.truthwear.truthwear.entity.Role;
+import com.truthwear.truthwear.entity.ShoppingCart;
 import com.truthwear.truthwear.entity.SiteUser;
 import com.truthwear.truthwear.repository.SiteUserRepository;
+import com.truthwear.truthwear.service.ShoppingCartServiceImpl;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -21,10 +25,11 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class AuthenticationService {
     private final SiteUserRepository userRepository;
+    private final ShoppingCartServiceImpl shoppingCartService;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
-
+    Logger logger = LoggerFactory.getLogger(AuthenticationService.class);
     public AuthenticationResponse register(RegisterRequest registerRequest) {
         if (registerRequest.getEmail() == null ||
                 registerRequest.getFirstName() == null ||
@@ -39,15 +44,22 @@ public class AuthenticationService {
                 .emailId(registerRequest.getEmail())
                 .password(passwordEncoder.encode(registerRequest.getPassword()))
                 .phoneNumber(registerRequest.getPhoneNumber())
+                .shoppingCart(null)
                 .role(Role.USER)
                 .build();
-        SiteUser user1 = userRepository.save(user);
+
+        SiteUser savedUser = userRepository.save(user);
+        logger.warn("Saved user: " + savedUser);
+        logger.warn("Updating user shopping cart");
+        savedUser.setShoppingCart(shoppingCartService.createShoppingCart(new ShoppingCart(savedUser)));
+        SiteUser user1 = userRepository.save(savedUser);
+        logger.warn("Updated user shopping cart"+user1.getShoppingCart());
 
         Map<String, String> jwtToken = jwtService.generateToken(user);
         return AuthenticationResponse.builder()
                 .token(jwtToken.get("access_token"))
                 .refreshToken(jwtToken.get("refresh_token"))
-                .siteUser(user1)
+                .siteUser(savedUser)
                 .build();
     }
 

@@ -1,5 +1,6 @@
 package com.truthwear.truthwear.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -14,8 +15,9 @@ public class ShoppingCart {
     @Column(name = "id")
     private int id;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
+    @OneToOne
+    @JsonIgnore
+    @JoinColumn(name = "user_id", unique = true)
     private SiteUser user;
 
     public ShoppingCart(SiteUser user) {
