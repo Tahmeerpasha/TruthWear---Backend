@@ -52,8 +52,7 @@ public ShoppingCartItem createShoppingCartItem(ShoppingCartItem shoppingCartItem
             if(shoppingCartItem.getQuantity() <= 0 && shoppingCartItem1.getQuantity() == 1){
                 shoppingCartItemRepository.delete(shoppingCartItem1);
                 return shoppingCartItem1;
-            }
-            if (shoppingCartItem.getQuantity() == 0) {
+            }else if (shoppingCartItem.getQuantity() == 0) {
                 shoppingCartItem1.setQuantity(shoppingCartItem1.getQuantity() - 1);
             } else {
                 shoppingCartItem1.setQuantity(shoppingCartItem1.getQuantity() + shoppingCartItem.getQuantity());

@@ -6,12 +6,17 @@ import com.truthwear.truthwear.repository.ProductCategoryRepository;
 import com.truthwear.truthwear.repository.ProductRepository;
 import com.truthwear.truthwear.service.interfaces.ProductService;
 import lombok.RequiredArgsConstructor;
+import net.coobird.thumbnailator.Thumbnails;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.imageio.ImageIO;
+import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -37,28 +42,68 @@ public class ProductServiceImpl implements ProductService {
         return productRepository.findById(id);
     }
 
-    @Override
+    //    @Override
+//    public ResponseEntity<Product> createProduct(String categoryName, String productName, String productDescription, MultipartFile image, long stock, double price) {
+//        try {
+//            String fileName = image.getOriginalFilename();
+//            String filePath = uploadDirectory + File.separator + fileName;
+//
+//            // If directory is not present then create it
+////            File file1 = new File(uploadDirectory);
+////            if(!file1.exists()){
+////                file1.mkdir();
+////            }
+////            print the path where image is stored
+////            System.out.println(file.getAbsolutePath());
+//
+//
+////            Copy file to the image directory
+//            Files.copy(image.getInputStream(), Paths.get(filePath));
+//            ProductCategory productCategory = productCategoryRepository.findByCategoryName(categoryName);
+//            Product product = new Product(productCategory, productName, productDescription, filePath, stock, price);
+//            productRepository.save(product);
+//            return ResponseEntity.ok(product);
+//        } catch (Exception e) {
+//            System.out.println(e.getMessage());
+//            return ResponseEntity.internalServerError().body(null);
+//        }
+//    }
     public ResponseEntity<Product> createProduct(String categoryName, String productName, String productDescription, MultipartFile image, long stock, double price) {
         try {
             String fileName = image.getOriginalFilename();
             String filePath = uploadDirectory + File.separator + fileName;
 
-            // If directory is not present then create it
-//            File file1 = new File(uploadDirectory);
-//            if(!file1.exists()){
-//                file1.mkdir();
-//            }
-//            print the path where image is stored
-//            System.out.println(file.getAbsolutePath());
+            // Create the directory if it doesn't exist
+            Files.createDirectories(Paths.get(uploadDirectory));  // Concise directory creation
 
+            // Resize image and add white background
+            BufferedImage originalImage = ImageIO.read(image.getInputStream());
+            BufferedImage resizedImage = Thumbnails.of(originalImage)
+                    .size(1920, 1080)
+                    .outputFormat("JPEG")  // Adjust format as needed
+                    .asBufferedImage();
+            BufferedImage whiteBackground = new BufferedImage(1920, 1080, BufferedImage.TYPE_INT_RGB);
+            Graphics2D g2d = whiteBackground.createGraphics();
+            g2d.setColor(Color.WHITE);
+            g2d.fillRect(0, 0, 1920, 1080);
+            int x = (1920 - resizedImage.getWidth()) / 2;
+            int y = (1080 - resizedImage.getHeight()) / 2;
+            g2d.drawImage(resizedImage, x, y, null);
+            g2d.dispose();
 
-//            Copy file to the image directory
-            Files.copy(image.getInputStream(), Paths.get(filePath));
+            // Save the modified image
+            ImageIO.write(whiteBackground, "JPEG", new File(filePath));  // Adjust format as needed
+
+            // Continue with product creation
             ProductCategory productCategory = productCategoryRepository.findByCategoryName(categoryName);
             Product product = new Product(productCategory, productName, productDescription, filePath, stock, price);
             productRepository.save(product);
             return ResponseEntity.ok(product);
+        } catch (IOException e) {
+            // Handle image processing errors
+            return ResponseEntity.badRequest().build();
         } catch (Exception e) {
+            // Handle other errors
             System.out.println(e.getMessage());
             return ResponseEntity.internalServerError().body(null);
         }

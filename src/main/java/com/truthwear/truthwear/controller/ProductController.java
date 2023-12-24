@@ -108,7 +108,6 @@ public class ProductController {
                                                  @RequestParam(required = false) Long stock,
                                                  @RequestParam(required = false) Double price
                                                  ) {
-//            System.out.println("id: " + id+ " category: " + productCategory + " name: " + productName + " desc: " + productDescription + " image: " + image + " stock: " + stock + " price: " + price);
         try {
             return productService.updateProduct(id, productCategory, productName, productDescription, image, stock, price);
         } catch (Exception e) {
