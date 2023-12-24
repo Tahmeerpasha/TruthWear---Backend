@@ -48,6 +48,7 @@ public class ShoppingCartItemController {
             ShoppingCartItem createdShoppingCartItem = shoppingCartItemService.createShoppingCartItem(shoppingCartItem);
             return ResponseEntity.status(HttpStatus.CREATED).body(createdShoppingCartItem);
         } catch (Exception e) {
+            System.out.println(e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }

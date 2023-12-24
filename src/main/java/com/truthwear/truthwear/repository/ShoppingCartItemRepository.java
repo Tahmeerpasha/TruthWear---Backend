@@ -7,4 +7,6 @@ import java.util.List;
 
 public interface ShoppingCartItemRepository extends JpaRepository<ShoppingCartItem,Integer> {
     List<ShoppingCartItem> findAllByCartId(int cartId);
+
+    ShoppingCartItem findByCartIdAndProductId(int id, int id1);
 }

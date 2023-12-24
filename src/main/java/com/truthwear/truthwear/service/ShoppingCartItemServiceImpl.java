@@ -34,10 +34,35 @@ public class ShoppingCartItemServiceImpl implements ShoppingCartItemService {
     }
 
     // Create a new shopping cart item
-    @Override
-    public ShoppingCartItem createShoppingCartItem(ShoppingCartItem shoppingCartItem) {
-        return shoppingCartItemRepository.save(shoppingCartItem);
+   @Override
+public ShoppingCartItem createShoppingCartItem(ShoppingCartItem shoppingCartItem) {
+    ShoppingCart cart = shoppingCartItem.getCart();
+    if (cart != null) {
+        Optional<ShoppingCart> existingCart = shoppingCartRepository.findById(cart.getId());
+        if (existingCart.isEmpty()) {
+            // The cart does not exist in the database, so save it
+            cart = shoppingCartRepository.save(cart);
+        } else {
+            // The cart already exists in the database, so use the existing one
+            cart = existingCart.get();
+        }
+        shoppingCartItem.setCart(cart);
+        ShoppingCartItem shoppingCartItem1 = shoppingCartItemRepository.findByCartIdAndProductId(shoppingCartItem.getCart().getId(), shoppingCartItem.getProduct().getId());
+        if (shoppingCartItem1 != null){
+            if(shoppingCartItem.getQuantity() <= 0 && shoppingCartItem1.getQuantity() == 1){
+                shoppingCartItemRepository.delete(shoppingCartItem1);
+                return shoppingCartItem1;
+            }
+            if (shoppingCartItem.getQuantity() == 0) {
+                shoppingCartItem1.setQuantity(shoppingCartItem1.getQuantity() - 1);
+            } else {
+                shoppingCartItem1.setQuantity(shoppingCartItem1.getQuantity() + shoppingCartItem.getQuantity());
+            }
+            return shoppingCartItemRepository.save(shoppingCartItem1);
+        }
     }
+    return shoppingCartItemRepository.save(shoppingCartItem);
+}
 
     // Update an existing shopping cart item
     @Override
